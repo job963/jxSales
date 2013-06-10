@@ -1,7 +1,7 @@
 <?php
 
 /*
- *    This file is part of the module OxProbs for OXID eShop Community Edition.
+ *    This file is part of the module jxSales for OXID eShop Community Edition.
  *
  *    The module OxProbs for OXID eShop Community Edition is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -16,10 +16,9 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link   https://code.google.com/p/oxprobs/
- * @license http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
- * 
- * $Id: custservice.php 69 2011-12-18 09:48:09Z jobarthel@gmail.com $
+ * @link      https://github.com/job963/jxSales
+ * @license   http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
+ * @copyright (C) Joachim Barthel 2012-2013
  *
  */
  

@@ -10,7 +10,7 @@ $sMetadataVersion = '1.0';
  */
 $aModule = array(
     'id'           => 'jxsales',
-    'title'        => 'Sales Search and Analysis',
+    'title'        => 'jxSales - Sales Search and Analysis',
     'description'  => array(
                         'de'=>'Analyse-Modul für die Ermittlung .',
                         'en'=>'Analysis module for finding problematical shop data.'
