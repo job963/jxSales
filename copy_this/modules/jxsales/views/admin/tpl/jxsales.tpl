@@ -14,7 +14,7 @@
     top.setTitle();
   }
 
-function editThis( sID )
+function editThis( sID, sClass )
 {
     [{assign var="shMen" value=1}]
 
@@ -50,84 +50,122 @@ function editThis( sID )
 
     var oTransfer = document.getElementById("transfer");
     oTransfer.oxid.value=sID;
-    oTransfer.cl.value='article';
+    oTransfer.cl.value=sClass; /*'article';*/
     oTransfer.submit();
 }
+
+function change_all( name, elem )
+{
+    if(!elem || !elem.form) 
+        return alert("Check Parameters");
+
+    var chkbox = elem.form.elements[name];
+    if (!chkbox) 
+        return alert(name + " doesn't exist!");
+
+    if (!chkbox.length) 
+        chkbox.checked = elem.checked; 
+    else 
+        for(var i = 0; i < chkbox.length; i++)
+            chkbox[i].checked = elem.checked;
+}
+
 </script>
 
-<div class="center">
+[{*<div class="center">*}]
     <h1>[{ oxmultilang ident="JXSALES_TITLE" }]</h1>
+    <form name="transfer" id="transfer" action="[{ $shop->selflink }]" method="post">
+        [{ $shop->hiddensid }]
+        <input type="hidden" name="oxid" value="[{ $oxid }]">
+        <input type="hidden" name="cl" value="article" size="40">
+        <input type="hidden" name="updatelist" value="1">
+    </form>
+        
+<form name="jxsales" id="jxsales" action="[{ $oViewConf->selflink }]" method="post">
     <p>
-        <form name="jxsales" id="jxsales_srcval" action="[{ $oViewConf->selflink }]" method="post">
         [{ $oViewConf->hiddensid }]
         <input type="hidden" name="cl" value="jxsales">
+        <input type="hidden" name="fnc" value="">
         <input type="hidden" name="oxid" value="[{ $oxid }]">
         <table width="80%"><tr>
         <td align="left">
             <label>Suchbegriff:</label> <input type="text" name="jxsales_srcval" value="[{ $jxsales_srcval }]">
-            <input type="submit" value=" [{ oxmultilang ident="ORDER_MAIN_UPDATE_DELPAY" }] " />
+            <input type="submit" 
+                onClick="document.forms['jxsales'].elements['fnc'].value = '';" 
+                value=" [{ oxmultilang ident="ORDER_MAIN_UPDATE_DELPAY" }] " />
         </td>
         <td align="right">
             [{*<input type="submit" value=" [{ oxmultilang ident="ORDER_MAIN_UPDATE_DELPAY" }] " />*}]
         </td>
+        <td>
+            <input class="edittext" type="submit" 
+                onClick="document.forms['jxsales'].elements['fnc'].value = 'downloadResult';" 
+                value=" [{ oxmultilang ident="JXSALES_DOWNLOAD" }] " [{ $readonly }]>
+        </td>
         </tr></table>
-        </form>
+        [{*</form>*}]
     </p>
-    <p>
-        <form name="transfer" id="transfer" action="[{ $shop->selflink }]" method="post">
-            [{ $shop->hiddensid }]
-            <input type="hidden" name="oxid" value="[{ $oxid }]">
-            <input type="hidden" name="cl" value="article" size="40">
-            <input type="hidden" name="updatelist" value="1">
-        </form>
-        
-        <table width="100%">
-        <thead><tr bgcolor="#dddddd">
-            <th align="left">[{ oxmultilang ident="ARTICLE_MAIN_ARTNUM" }]</th>
-            <th align="left">[{ oxmultilang ident="ARTICLE_MAIN_TITLE" }]</th>
-            <th align="left">[{ oxmultilang ident="JXSALES_VARIANT" }]</th>
-            <th align="left">[{ oxmultilang ident="ARTICLE_MAIN_EAN" }]</th>
-            <th align="left">[{ oxmultilang ident="GENERAL_DATE" }]</th>
-            <th align="left">[{ oxmultilang ident="USER_MAIN_NAME" }] ([{ oxmultilang ident="JXSALES_CUSTNO" }])</th>
-            <th align="left">[{ oxmultilang ident="USER_MAIN_STRNR" }]</th>
-            <th align="left">[{ oxmultilang ident="USER_LIST_ZIP" }]/[{ oxmultilang ident="USER_LIST_PLACE" }]</th>
-            <th align="left">[{ oxmultilang ident="GENERAL_COUNTRY" }]</th>
-        </tr></thead>
 
-        <tbody>
+    <div id="liste">
+        <table cellspacing="0" cellpadding="0" border="0" width="99%">
+        <tr>
+            [{ assign var="headStyle" value="border-bottom:1px solid #C8C8C8; font-weight:bold;" }]
+            <td class="listfilter first" style="[{$headStyle}]" height="15" width="30" align="center">
+                <div class="r1"><div class="b1">[{ oxmultilang ident="GENERAL_ACTIVTITLE" }]</div></div>
+            </td>
+            <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="ARTICLE_MAIN_ARTNUM" }]</div></div></td>
+            <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="ARTICLE_MAIN_TITLE" }]</div></div></td>
+            <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="JXSALES_VARIANT" }]</div></div></td>
+            <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="ARTICLE_MAIN_EAN" }]</div></div></td>
+            <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="GENERAL_DATE" }]</div></div></td>
+            <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="USER_MAIN_NAME" }] ([{ oxmultilang ident="JXSALES_CUSTNO" }])</div></div></td>
+            <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="USER_MAIN_STRNR" }]</div></div></td>
+            <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="USER_LIST_ZIP" }]/[{ oxmultilang ident="USER_LIST_PLACE" }]</div></div></td>
+            <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="GENERAL_COUNTRY" }]</div></div></td>
+            <td class="listfilter" style="[{$headStyle}]" align="center"><div class="r1"><div class="b1"><input type="checkbox" onclick="change_all('jxsales_oxid[]', this)"></div></div></td>
+        </tr>
+
+        [{*<tbody>*}]
         [{ assign var="actArtTitle" value="..." }]
         [{ assign var="actArtVar" value="..." }]
         [{foreach name=outer item=Order from=$aOrders}]
-            <tr bgcolor="[{cycle values="#ffffff,#f0f0f0"}]">
+            <tr>
+                [{ cycle values="listitem,listitem2" assign="listclass" }]
                 [{ if $actArtTitle != $Order.oxtitle }]
-                    <td><a href="Javascript:editThis('[{$Order.oxid}]');">[{$Order.oxartnum}]</a></td>
-                    <td><a href="Javascript:editThis('[{$Order.oxid}]');">[{$Order.oxtitle}]</a></td>
-                    <td><a href="Javascript:editThis('[{$Order.oxid}]');">[{$Order.oxselvariant}]</a></td>
-                    <td><a href="Javascript:editThis('[{$Order.oxid}]');">[{$Order.oxean}]</a></td>
+                    <td valign="top" class="[{$listclass}][{ if $Order.oxactive == 1}] active[{/if}]" height="15">
+                        <div class="listitemfloating">&nbsp</a></div>
+                    </td>
+                    <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.artid}]','article');" title="[{ oxmultilang ident="JXSALES_GOTOPRODUCT" }]">[{$Order.oxartnum}]</a></td>
+                    <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.artid}]','article');" title="[{ oxmultilang ident="JXSALES_GOTOPRODUCT" }]">[{$Order.oxtitle}]</a></td>
+                    <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.artid}]','article');" title="[{ oxmultilang ident="JXSALES_GOTOPRODUCT" }]">[{$Order.oxselvariant}]</a></td>
+                    <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.artid}]','article');" title="[{ oxmultilang ident="JXSALES_GOTOPRODUCT" }]">[{$Order.oxean}]</a></td>
                     [{ assign var="actArtTitle" value=$Order.oxtitle }]
                     [{ assign var="actArtVar" value=$Order.oxselvariant }]
                 [{ elseif $actArtVar != $Order.oxselvariant }]
-                    <td> </td>
-                    <td> </td>
-                    <td><a href="Javascript:editThis('[{$Order.oxid}]');">[{$Order.oxselvariant}]</a></td>
-                    <td><a href="Javascript:editThis('[{$Order.oxid}]');">[{$Order.oxean}]</a></td>
+                    <td class="[{$listclass}]"> </td>
+                    <td class="[{$listclass}]"> </td>
+                    <td class="[{$listclass}]"> </td>
+                    <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.artid}]','article');" title="[{ oxmultilang ident="JXSALES_GOTOPRODUCT" }]">[{$Order.oxselvariant}]</a></td>
+                    <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.artid}]','article');" title="[{ oxmultilang ident="JXSALES_GOTOPRODUCT" }]">[{$Order.oxean}]</a></td>
                     [{ assign var="actArtVar" value=$Order.oxselvariant }]
                 [{ else }]
-                    <td> </td>
-                    <td> </td>
-                    <td> </td>
-                    <td> </td>
+                    <td class="[{$listclass}]"> </td>
+                    <td class="[{$listclass}]"> </td>
+                    <td class="[{$listclass}]"> </td>
+                    <td class="[{$listclass}]"> </td>
+                    <td class="[{$listclass}]"> </td>
                 [{/if}]
-                <td><a href="Javascript:editThis('[{$Order.oxid}]');">[{$Order.oxorderdate}]</a></td>
-                <td><a href="Javascript:editThis('[{$Order.oxid}]');">[{$Order.oxbillfname}] [{$Order.oxbilllname}] ([{$Order.oxcustnr}])</a></td>
-                <td><a href="Javascript:editThis('[{$Order.oxid}]');">[{$Order.oxbillstreet}] [{$Order.oxbillstreetnr}]</a></td>
-                <td><a href="Javascript:editThis('[{$Order.oxid}]');">[{$Order.oxbillzip}] [{$Order.oxbillcity}]</a></td>
-                <td><a href="Javascript:editThis('[{$Order.oxid}]');">[{$Order.oxcountry}]</a></td>
+                <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.orderid}]','admin_order');" title="[{ oxmultilang ident="JXSALES_GOTOORDER" }]">[{$Order.oxorderdate}]</a></td>
+                <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.userid}]','admin_user');" title="[{ oxmultilang ident="JXSALES_GOTOUSER" }]">[{$Order.oxbillfname}] [{$Order.oxbilllname}] ([{$Order.oxcustnr}])</a></td>
+                <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.userid}]','admin_user');" title="[{ oxmultilang ident="JXSALES_GOTOUSER" }]">[{$Order.oxbillstreet}] [{$Order.oxbillstreetnr}]</a></td>
+                <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.userid}]','admin_user');" title="[{ oxmultilang ident="JXSALES_GOTOUSER" }]">[{$Order.oxbillzip}] [{$Order.oxbillcity}]</a></td>
+                <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.userid}]','admin_user');" title="[{ oxmultilang ident="JXSALES_GOTOUSER" }]">[{$Order.oxcountry}]</a></td>
+                <td class="[{$listclass}]" align="center"><input type="checkbox" name="jxsales_oxid[]" value="[{$Order.orderartid}]"></td>
             </tr>
         [{/foreach}]
-        </tbody>
+        [{*</tbody>*}]
 
         </table>
-    </p>
-
-</div>
+    </div>
+</form>
+[{*</div>*}]

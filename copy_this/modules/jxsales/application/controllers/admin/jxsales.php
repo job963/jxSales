@@ -25,6 +25,7 @@
 class jxsales extends oxAdminView
 {
     protected $_sThisTemplate = "jxsales.tpl";
+
     public function render()
     {
         parent::render();
@@ -32,18 +33,57 @@ class jxsales extends oxAdminView
         $oSmarty->assign( "oViewConf", $this->_aViewData["oViewConf"]);
         $oSmarty->assign( "shop", $this->_aViewData["shop"]);
 
-        $cSrcVal = isset($_POST['jxsales_srcval']) ? $_POST['jxsales_srcval'] : $_GET['jxsales_srcval']; 
-        if (empty($cSrcVal))
-            $cSrcVal = "";
+        $sSrcVal = oxConfig::getParameter( "jxsales_srcval" );
+        if (empty($sSrcVal))
+            $sSrcVal = "";
         else
-            $cSrcVal = strtoupper($cSrcVal);
-        $oSmarty->assign( "jxsales_srcval", $cSrcVal );
-        //echo '/'.$cSrcVal.'/';
+            $sSrcVal = strtoupper($sSrcVal);
+        $oSmarty->assign( "jxsales_srcval", $sSrcVal );
+
+        $aOrders = $this->_retrieveData($sSrcVal);
+        $oSmarty->assign("aOrders",$aOrders);
+
+        return $this->_sThisTemplate;
+    }
+    
+    
+    public function downloadResult()
+    {
+        $sSrcVal = oxConfig::getParameter( "jxsales_srcval" ); 
+        if (empty($sSrcVal))
+            $sSrcVal = "";
+        else
+            $sSrcVal = strtoupper($sSrcVal);
         
-        $sSql = "SELECT o.oxid, d.oxartnum, d.oxtitle, d.oxselvariant, a.oxean, DATE(o.oxorderdate) as oxorderdate, "
-                    . "u.oxusername, u.oxcustnr, o.oxbillfname, o.oxbilllname, o.oxbillstreet, o.oxbillstreetnr, o.oxbillzip, o.oxbillcity, c.oxtitle AS oxcountry "
+        $aOrders = array();
+        $aOrders = $this->_retrieveData($sSrcVal);
+
+        $aOxid = oxConfig::getParameter( "jxsales_oxid" ); 
+        
+        $sContent = '';
+        foreach ($aOrders as $aOrder) {
+            if ( in_array($aOrder['orderartid'], $aOxid) ) {
+                $sContent .= '"' . implode('","', $aOrder) . '"' . chr(13);
+            }
+        }
+
+        header("Content-Type: text/plain");
+        header("content-length: ".strlen($sContent));
+        header("Content-Disposition: attachment; filename=\"sales-report.csv\"");
+        echo $sContent;
+
+        return;
+    }
+
+    
+    private function _retrieveData($sSrcVal)
+    {
+        
+        $sSql = "SELECT d.oxid AS orderartid, a.oxid AS artid, o.oxid AS orderid, u.oxid AS userid, a.oxactive, d.oxartnum, d.oxtitle, d.oxselvariant, a.oxean, "
+                    . "DATE(o.oxorderdate) as oxorderdate, u.oxusername, u.oxcustnr, o.oxbillfname, o.oxbilllname, "
+                    . "o.oxbillstreet, o.oxbillstreetnr, o.oxbillzip, o.oxbillcity, c.oxtitle AS oxcountry "
                 . "FROM oxorderarticles d, oxorder o, oxarticles a, oxuser u, oxcountry c "
-                . "WHERE (UPPER(d.oxartnum) LIKE '%$cSrcVal%' OR UPPER(d.oxtitle) LIKE '%$cSrcVal%' OR UPPER(d.oxselvariant) LIKE '%$cSrcVal%' OR a.oxean LIKE '%$cSrcVal%') "
+                . "WHERE (UPPER(d.oxartnum) LIKE '%$sSrcVal%' OR UPPER(d.oxtitle) LIKE '%$sSrcVal%' OR UPPER(d.oxselvariant) LIKE '%$sSrcVal%' OR a.oxean LIKE '%$sSrcVal%') "
                     . "AND d.oxorderid = o.oxid "
                     . "AND d.oxartid = a.oxid "
                     . "AND o.oxuserid = u.oxid "
@@ -54,24 +94,22 @@ class jxsales extends oxAdminView
         //$i = 0;
         $aOrders = array();
 
-        if ($cSrcVal != "") {
+        if ($sSrcVal != "") {
             $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
             $rs = $oDb->Execute($sSql);
             /*echo '<pre>';
             echo $sSql;
-            echo '</pre>';*/
+            echo '</pre>';/* */
             while (!$rs->EOF) {
                 array_push($aOrders, $rs->fields);
                 $rs->MoveNext();
             }
             /*echo '<pre>';
             print_r($aOrders);
-            echo '</pre>';*/
+            echo '</pre>';/* */
         }
-
-         $oSmarty->assign("aOrders",$aOrders);
-
-         return $this->_sThisTemplate;
-   }
+        
+        return $aOrders;
+    }
  }
 ?>

@@ -6,6 +6,10 @@ $aLang = array(
     'JXSALES_TITLE'           => 'Artikel-Kunden Analyse',
     'JXSALES_CUSTNO'          => 'Cust-No.',
     'JXSALES_VARIANT'         => 'Variant',
+    'JXSALES_DOWNLOAD'        => 'Download',
+    'JXSALES_GOTOPRODUCT'     => 'Goto product',
+    'JXSALES_GOTOORDER'       => 'Goto order',
+    'JXSALES_GOTOUSER'        => 'Goto user',
     'charset'                 => 'ISO-8859-15',
 );
 
