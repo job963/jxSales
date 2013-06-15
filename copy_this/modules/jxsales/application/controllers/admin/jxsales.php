@@ -91,22 +91,15 @@ class jxsales extends oxAdminView
                     . "AND o.oxstorno = 0 "
                 . "ORDER BY d.oxtitle, o.oxorderdate ";
 
-        //$i = 0;
         $aOrders = array();
 
         if ($sSrcVal != "") {
             $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
             $rs = $oDb->Execute($sSql);
-            /*echo '<pre>';
-            echo $sSql;
-            echo '</pre>';/* */
             while (!$rs->EOF) {
                 array_push($aOrders, $rs->fields);
                 $rs->MoveNext();
             }
-            /*echo '<pre>';
-            print_r($aOrders);
-            echo '</pre>';/* */
         }
         
         return $aOrders;
