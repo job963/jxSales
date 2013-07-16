@@ -1,10 +1,6 @@
 [{*debug*}]
 [{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign box=" "}]
 
-[{*<script type="text/javascript" src="[{$shop->basetpldir}]sortable/sortable.js"></script>
-<link rel="stylesheet" type="text/css" href="[{$shop->basetpldir}]sortable/sortable.css" />
-<script type="text/javascript">image_path = "[{$shop->basetpldir}]sortable/";</script>*}]
-
 <script type="text/javascript">
   if(top)
   {
