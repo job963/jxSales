@@ -49,6 +49,33 @@ class jxsales extends oxAdminView
     
     public function downloadResult()
     {
+        $myConfig = oxRegistry::get("oxConfig");
+        switch ( $myConfig->getConfigParam("sJxSalesSeparator") ) {
+            case 'comma':
+                $sSep = ',';
+                break;
+            case 'semicolon':
+                $sSep = ';';
+                break;
+            case 'tab':
+                $sSep = chr(9);
+                break;
+            case 'pipe':
+                $sSep = '|';
+                break;
+            case 'tilde':
+                $sSep = '~';
+                break;
+            default:
+                $sSep = ',';
+                break;
+        }
+        if ( $myConfig->getConfigParam("bJxSalesQuote") ) {
+            $sBegin = '"';
+            $sSep   = '"' . $sSep . '"';
+            $sEnd   = '"';
+        }
+        
         $sSrcVal = oxConfig::getParameter( "jxsales_srcval" ); 
         if (empty($sSrcVal))
             $sSrcVal = "";
@@ -61,9 +88,13 @@ class jxsales extends oxAdminView
         $aOxid = oxConfig::getParameter( "jxsales_oxid" ); 
         
         $sContent = '';
+        if ( $myConfig->getConfigParam("bJxSalesHeader") ) {
+            $aHeader = array_keys($aOrders[0]);
+            $sContent .= $sBegin . implode($sSep, $aHeader) . $sEnd . chr(13);
+        }
         foreach ($aOrders as $aOrder) {
             if ( in_array($aOrder['orderartid'], $aOxid) ) {
-                $sContent .= '"' . implode('","', $aOrder) . '"' . chr(13);
+                $sContent .= $sBegin . implode($sSep, $aOrder) . $sEnd . chr(13);
             }
         }
 
@@ -80,9 +111,12 @@ class jxsales extends oxAdminView
     
     private function _retrieveData($sSrcVal)
     {
+        $myConfig = oxRegistry::get("oxConfig");
+        $replaceMRS = $myConfig->getConfigParam("bJxSalesReplaceMRS");
+        $replaceMR = $myConfig->getConfigParam("bJxSalesReplaceMR");
         
         $sSql = "SELECT d.oxid AS orderartid, a.oxid AS artid, o.oxid AS orderid, u.oxid AS userid, a.oxactive, d.oxartnum, d.oxtitle, d.oxselvariant, a.oxean, "
-                    . "DATE(o.oxorderdate) as oxorderdate, u.oxusername, u.oxcustnr, o.oxbillfname, o.oxbilllname, "
+                    . "DATE(o.oxorderdate) as oxorderdate, u.oxusername, u.oxcustnr, o.oxbillsal, REPLACE(REPLACE(o.oxbillsal,'MRS','{$replaceMRS}'),'MR','{$replaceMR}') AS personalsal, o.oxbillfname, o.oxbilllname, "
                     . "o.oxbillstreet, o.oxbillstreetnr, o.oxbillzip, o.oxbillcity, c.oxtitle AS oxcountry "
                 . "FROM oxorderarticles d, oxorder o, oxarticles a, oxuser u, oxcountry c "
                 . "WHERE (UPPER(d.oxartnum) LIKE '%$sSrcVal%' OR UPPER(d.oxtitle) LIKE '%$sSrcVal%' OR UPPER(d.oxselvariant) LIKE '%$sSrcVal%' OR a.oxean LIKE '%$sSrcVal%') "

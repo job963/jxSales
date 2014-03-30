@@ -102,6 +102,8 @@ function change_all( name, elem )
         [{*</form>*}]
     </p>
 
+    [{assign var="oConfig" value=$oViewConf->getConfig()}]
+    
     <div id="liste">
         <table cellspacing="0" cellpadding="0" border="0" width="99%">
         <tr>
@@ -112,13 +114,19 @@ function change_all( name, elem )
             <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="ARTICLE_MAIN_ARTNUM" }]</div></div></td>
             <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="ARTICLE_MAIN_TITLE" }]</div></div></td>
             <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="JXSALES_VARIANT" }]</div></div></td>
-            <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="ARTICLE_MAIN_EAN" }]</div></div></td>
+            [{if $oConfig->getConfigParam("bJxSalesDisplayEAN") }]
+                <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="ARTICLE_MAIN_EAN" }]</div></div></td>
+            [{/if}]
             <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="GENERAL_DATE" }]</div></div></td>
             <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="USER_MAIN_NAME" }] ([{ oxmultilang ident="JXSALES_CUSTNO" }])</div></div></td>
-            <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="USER_MAIN_STRNR" }]</div></div></td>
+            [{if $oConfig->getConfigParam("bJxSalesDisplayAddress") }]
+                <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="USER_MAIN_STRNR" }]</div></div></td>
+            [{/if}]
             <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="USER_LIST_ZIP" }]/[{ oxmultilang ident="USER_LIST_PLACE" }]</div></div></td>
-            <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="GENERAL_COUNTRY" }]</div></div></td>
-            <td class="listfilter" style="[{$headStyle}]" align="center"><div class="r1"><div class="b1"><input type="checkbox" onclick="change_all('jxsales_oxid[]', this)"></div></div></td>
+            [{if $oConfig->getConfigParam("bJxSalesDisplayCountry") }]
+                <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="GENERAL_COUNTRY" }]</div></div></td>
+            [{/if}]
+        <td class="listfilter" style="[{$headStyle}]" align="center"><div class="r1"><div class="b1"><input type="checkbox" onclick="change_all('jxsales_oxid[]', this)"></div></div></td>
         </tr>
 
         [{*<tbody>*}]
@@ -134,7 +142,9 @@ function change_all( name, elem )
                     <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.artid}]','article');" title="[{ oxmultilang ident="JXSALES_GOTOPRODUCT" }]">[{$Order.oxartnum}]</a></td>
                     <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.artid}]','article');" title="[{ oxmultilang ident="JXSALES_GOTOPRODUCT" }]">[{$Order.oxtitle}]</a></td>
                     <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.artid}]','article');" title="[{ oxmultilang ident="JXSALES_GOTOPRODUCT" }]">[{$Order.oxselvariant}]</a></td>
-                    <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.artid}]','article');" title="[{ oxmultilang ident="JXSALES_GOTOPRODUCT" }]">[{$Order.oxean}]</a></td>
+                    [{if $oConfig->getConfigParam("bJxSalesDisplayEAN") }]
+                        <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.artid}]','article');" title="[{ oxmultilang ident="JXSALES_GOTOPRODUCT" }]">[{$Order.oxean}]</a></td>
+                    [{/if}]
                     [{ assign var="actArtTitle" value=$Order.oxtitle }]
                     [{ assign var="actArtVar" value=$Order.oxselvariant }]
                 [{ elseif $actArtVar != $Order.oxselvariant }]
@@ -142,20 +152,28 @@ function change_all( name, elem )
                     <td class="[{$listclass}]"> </td>
                     <td class="[{$listclass}]"> </td>
                     <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.artid}]','article');" title="[{ oxmultilang ident="JXSALES_GOTOPRODUCT" }]">[{$Order.oxselvariant}]</a></td>
-                    <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.artid}]','article');" title="[{ oxmultilang ident="JXSALES_GOTOPRODUCT" }]">[{$Order.oxean}]</a></td>
+                    [{if $oConfig->getConfigParam("bJxSalesDisplayEAN") }]
+                        <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.artid}]','article');" title="[{ oxmultilang ident="JXSALES_GOTOPRODUCT" }]">[{$Order.oxean}]</a></td>
+                    [{/if}]
                     [{ assign var="actArtVar" value=$Order.oxselvariant }]
                 [{ else }]
                     <td class="[{$listclass}]"> </td>
                     <td class="[{$listclass}]"> </td>
                     <td class="[{$listclass}]"> </td>
-                    <td class="[{$listclass}]"> </td>
+                    [{if $oConfig->getConfigParam("bJxSalesDisplayEAN") }]
+                        <td class="[{$listclass}]"> </td>
+                    [{/if}]
                     <td class="[{$listclass}]"> </td>
                 [{/if}]
                 <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.orderid}]','admin_order');" title="[{ oxmultilang ident="JXSALES_GOTOORDER" }]">[{$Order.oxorderdate}]</a></td>
                 <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.userid}]','admin_user');" title="[{ oxmultilang ident="JXSALES_GOTOUSER" }]">[{$Order.oxbillfname}] [{$Order.oxbilllname}] ([{$Order.oxcustnr}])</a></td>
-                <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.userid}]','admin_user');" title="[{ oxmultilang ident="JXSALES_GOTOUSER" }]">[{$Order.oxbillstreet}] [{$Order.oxbillstreetnr}]</a></td>
+                [{if $oConfig->getConfigParam("bJxSalesDisplayAddress") }]
+                    <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.userid}]','admin_user');" title="[{ oxmultilang ident="JXSALES_GOTOUSER" }]">[{$Order.oxbillstreet}] [{$Order.oxbillstreetnr}]</a></td>
+                [{/if}]
                 <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.userid}]','admin_user');" title="[{ oxmultilang ident="JXSALES_GOTOUSER" }]">[{$Order.oxbillzip}] [{$Order.oxbillcity}]</a></td>
-                <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.userid}]','admin_user');" title="[{ oxmultilang ident="JXSALES_GOTOUSER" }]">[{$Order.oxcountry}]</a></td>
+                [{if $oConfig->getConfigParam("bJxSalesDisplayCountry") }]
+                    <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.userid}]','admin_user');" title="[{ oxmultilang ident="JXSALES_GOTOUSER" }]">[{$Order.oxcountry}]</a></td>
+                [{/if}]
                 <td class="[{$listclass}]" align="center"><input type="checkbox" name="jxsales_oxid[]" value="[{$Order.orderartid}]"></td>
             </tr>
         [{/foreach}]
