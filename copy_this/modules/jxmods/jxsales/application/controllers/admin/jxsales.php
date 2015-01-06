@@ -18,7 +18,7 @@
  *
  * @link      https://github.com/job963/jxSales
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
- * @copyright (C) Joachim Barthel 2012-2013 
+ * @copyright (C) Joachim Barthel 2012-2015
  *
  */
  
@@ -29,19 +29,20 @@ class jxsales extends oxAdminView
     public function render()
     {
         parent::render();
-        $oSmarty = oxUtilsView::getInstance()->getSmarty();
-        $oSmarty->assign( "oViewConf", $this->_aViewData["oViewConf"]);
-        $oSmarty->assign( "shop", $this->_aViewData["shop"]);
 
-        $sSrcVal = oxConfig::getParameter( "jxsales_srcval" );
+        $sSrcVal = $this->getConfig()->getRequestParameter( 'jxsales_srcval' );
         if (empty($sSrcVal))
             $sSrcVal = "";
         else
             $sSrcVal = strtoupper($sSrcVal);
-        $oSmarty->assign( "jxsales_srcval", $sSrcVal );
+        $this->_aViewData["jxsales_srcval"] = $sSrcVal;
 
-        $aOrders = $this->_retrieveData($sSrcVal);
-        $oSmarty->assign("aOrders",$aOrders);
+        $this->_aViewData["aOrders"] = $this->_retrieveData($sSrcVal);
+
+        $oModule = oxNew('oxModule');
+        $oModule->load('jxsales');
+        $this->_aViewData["sModuleId"] = $oModule->getId();
+        $this->_aViewData["sModuleVersion"] = $oModule->getInfo('version');
 
         return $this->_sThisTemplate;
     }
@@ -70,13 +71,13 @@ class jxsales extends oxAdminView
                 $sSep = ',';
                 break;
         }
-        if ( $myConfig->getConfigParam("bJxSalesQuote") ) {
+        if ( $myConfig->getConfigParam( 'bJxSalesQuote' ) ) {
             $sBegin = '"';
             $sSep   = '"' . $sSep . '"';
             $sEnd   = '"';
         }
         
-        $sSrcVal = oxConfig::getParameter( "jxsales_srcval" ); 
+        $sSrcVal = $this->getConfig()->getRequestParameter( 'jxsales_srcval' );
         if (empty($sSrcVal))
             $sSrcVal = "";
         else
@@ -85,10 +86,10 @@ class jxsales extends oxAdminView
         $aOrders = array();
         $aOrders = $this->_retrieveData($sSrcVal);
 
-        $aOxid = oxConfig::getParameter( "jxsales_oxid" ); 
+        $aOxid = $this->getConfig()->getRequestParameter( 'jxsales_oxid' );
         
         $sContent = '';
-        if ( $myConfig->getConfigParam("bJxSalesHeader") ) {
+        if ( $myConfig->getConfigParam( 'bJxSalesHeader' ) ) {
             $aHeader = array_keys($aOrders[0]);
             $sContent .= $sBegin . implode($sSep, $aHeader) . $sEnd . chr(13);
         }
@@ -114,17 +115,34 @@ class jxsales extends oxAdminView
         $myConfig = oxRegistry::get("oxConfig");
         $replaceMRS = $myConfig->getConfigParam("bJxSalesReplaceMRS");
         $replaceMR = $myConfig->getConfigParam("bJxSalesReplaceMR");
+
+        $sOxvOrderArticles = getViewName( 'oxorderarticles', $this->_iEditLang, $sShopID );
+        $sOxvOrder = getViewName( 'oxorder', $this->_iEditLang, $sShopID );
+        $sOxvArticles = getViewName( 'oxarticles', $this->_iEditLang, $sShopID );
+        $sOxvUser = getViewName( 'oxuser', $this->_iEditLang, $sShopID );
+        $sOxvCountry = getViewName( 'oxcountry', $this->_iEditLang, $sShopID );
+
+        $sWhere = "";
+        if ( is_string($this->_aViewData["oViewConf"]->getActiveShopId()) ) { 
+            // This is a CE or PE Shop
+            $sShopId = "'" . $this->_aViewData["oViewConf"]->getActiveShopId() . "'";
+        }
+        else {
+            // This is a EE Shop
+            $iShopId = $this->_aViewData["oViewConf"]->getActiveShopId();
+        }
         
         $sSql = "SELECT d.oxid AS orderartid, a.oxid AS artid, o.oxid AS orderid, u.oxid AS userid, a.oxactive, d.oxartnum, d.oxtitle, d.oxselvariant, a.oxean, "
                     . "DATE(o.oxorderdate) as oxorderdate, u.oxusername, u.oxcustnr, o.oxbillsal, REPLACE(REPLACE(o.oxbillsal,'MRS','{$replaceMRS}'),'MR','{$replaceMR}') AS personalsal, o.oxbillfname, o.oxbilllname, "
                     . "o.oxbillstreet, o.oxbillstreetnr, o.oxbillzip, o.oxbillcity, c.oxtitle AS oxcountry "
-                . "FROM oxorderarticles d, oxorder o, oxarticles a, oxuser u, oxcountry c "
+                . "FROM $sOxvOrderArticles d, $sOxvOrder o, $sOxvArticles a, $sOxvUser u, $sOxvCountry c "
                 . "WHERE (UPPER(d.oxartnum) LIKE '%$sSrcVal%' OR UPPER(d.oxtitle) LIKE '%$sSrcVal%' OR UPPER(d.oxselvariant) LIKE '%$sSrcVal%' OR a.oxean LIKE '%$sSrcVal%') "
                     . "AND d.oxorderid = o.oxid "
                     . "AND d.oxartid = a.oxid "
                     . "AND o.oxuserid = u.oxid "
                     . "AND u.oxcountryid = c.oxid "
                     . "AND o.oxstorno = 0 "
+                    . "AND a.oxshopid = $sShopId "
                 . "ORDER BY d.oxtitle, o.oxorderdate ";
 
         $aOrders = array();

@@ -2,8 +2,8 @@
 $sLangName  = "English";
 $iLangNr    = 1;
 $aLang = array(
-    'jxsales_menu'            => 'Artikel-Kunden Analyse',
-    'JXSALES_TITLE'           => 'Artikel-Kunden Analyse',
+    'jxsales_menu'            => 'Article-Customer Analysis',
+    'JXSALES_TITLE'           => 'Article-Customer Analysis',
     'JXSALES_CUSTNO'          => 'Cust-No.',
     'JXSALES_VARIANT'         => 'Variant',
     'JXSALES_DOWNLOAD'        => 'Download',
