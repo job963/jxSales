@@ -2,14 +2,20 @@
 $sLangName  = "English";
 $iLangNr    = 1;
 $aLang = array(
+    'charset'                 => 'UTF-8',
+    
     'jxsales_menu'            => 'Article-Customer Analysis',
+    'jxsales_menu_latest'     => 'Latest Orders',
     'JXSALES_TITLE'           => 'Article-Customer Analysis',
+    'JXSALES_LATEST_TITLE'    => 'Latest Orders',
     'JXSALES_CUSTNO'          => 'Cust-No.',
     'JXSALES_VARIANT'         => 'Variant',
     'JXSALES_DOWNLOAD'        => 'Download',
     'JXSALES_GOTOPRODUCT'     => 'Goto product',
     'JXSALES_GOTOORDER'       => 'Goto order',
     'JXSALES_GOTOUSER'        => 'Goto user',
+    'JXSALES_ARTSUM'          => 'Sum',
+    'JXSALES_TOTALSUM'        => 'Total Sum',
 
     'SHOP_MODULE_GROUP_JXSALES_DISPLAY'        => 'Display',
     'SHOP_MODULE_bJxSalesDisplayEAN'           => 'Show EAN',
@@ -27,8 +33,6 @@ $aLang = array(
     'SHOP_MODULE_sJxSalesSeparator_pipe'       => '|&nbsp;&nbsp; (pipe)',
     'SHOP_MODULE_sJxSalesSeparator_tilde'      => '&sim;&nbsp; (tilde)',
     'SHOP_MODULE_bJxSalesQuote'                => 'Encapsulate columns by quotes',
-    
-    'charset'                 => 'ISO-8859-15',
 );
 
 ?>

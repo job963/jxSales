@@ -18,34 +18,27 @@
  *
  * @link      https://github.com/job963/jxSales
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
- * @copyright (C) Joachim Barthel 2012-2015
+ * @copyright (C) Joachim Barthel 2012-2017
  *
  */
  
-class jxsales extends oxAdminView
+class jxsales_latest extends oxAdminView
 {
     /**
      *
-     * @var string 
+     * @var type 
      */
-    protected $_sThisTemplate = "jxsales.tpl";
+    protected $_sThisTemplate = "jxsales_latest.tpl";
 
     /**
      * 
-     * @return string
+     * @return type
      */
     public function render()
     {
         parent::render();
 
-        $sSrcVal = $this->getConfig()->getRequestParameter( 'jxsales_srcval' );
-        if (empty($sSrcVal))
-            $sSrcVal = "";
-        else
-            $sSrcVal = strtoupper($sSrcVal);
-        $this->_aViewData["jxsales_srcval"] = $sSrcVal;
-
-        $this->_aViewData["aOrders"] = $this->_retrieveData($sSrcVal);
+        $this->_aViewData["aOrders"] = $this->_retrieveData();
 
         $oModule = oxNew('oxModule');
         $oModule->load('jxsales');
@@ -124,20 +117,21 @@ class jxsales extends oxAdminView
     
     /**
      * 
-     * @param type $sSrcVal
      * @return array
      */
-    private function _retrieveData($sSrcVal)
+    private function _retrieveData()
     {
         $myConfig = oxRegistry::get("oxConfig");
-        $replaceMRS = $myConfig->getConfigParam("bJxSalesReplaceMRS");
-        $replaceMR = $myConfig->getConfigParam("bJxSalesReplaceMR");
+        $replaceMRS = $myConfig->getConfigParam("sJxSalesReplaceMRS");
+        $replaceMR = $myConfig->getConfigParam("sJxSalesReplaceMR");
 
         $sOxvOrderArticles = getViewName( 'oxorderarticles', $this->_iEditLang, $sShopID );
         $sOxvOrder = getViewName( 'oxorder', $this->_iEditLang, $sShopID );
         $sOxvArticles = getViewName( 'oxarticles', $this->_iEditLang, $sShopID );
         $sOxvUser = getViewName( 'oxuser', $this->_iEditLang, $sShopID );
         $sOxvCountry = getViewName( 'oxcountry', $this->_iEditLang, $sShopID );
+        $sOxvPayments = getViewName( 'oxpayments', $this->_iEditLang, $sShopID );
+        $sOxvOrderFiles = getViewName( 'oxorderfiles', $this->_iEditLang, $sShopID );
 
         $sWhere = "";
         if ( is_string($this->_aViewData["oViewConf"]->getActiveShopId()) ) { 
@@ -149,29 +143,54 @@ class jxsales extends oxAdminView
             $sShopId = $this->_aViewData["oViewConf"]->getActiveShopId();
         }
         
-        $sSql = "SELECT d.oxid AS orderartid, a.oxid AS artid, o.oxid AS orderid, u.oxid AS userid, a.oxactive, d.oxartnum, d.oxtitle, d.oxselvariant, a.oxean, "
-                    . "DATE(o.oxorderdate) as oxorderdate, u.oxusername, u.oxcustnr, o.oxbillsal, REPLACE(REPLACE(o.oxbillsal,'MRS','{$replaceMRS}'),'MR','{$replaceMR}') AS personalsal, o.oxbillfname, o.oxbilllname, "
-                    . "o.oxbillstreet, o.oxbillstreetnr, o.oxbillzip, o.oxbillcity, c.oxtitle AS oxcountry "
-                . "FROM $sOxvOrderArticles d, $sOxvOrder o, $sOxvArticles a, $sOxvUser u, $sOxvCountry c "
-                . "WHERE (UPPER(d.oxartnum) LIKE '%$sSrcVal%' OR UPPER(d.oxtitle) LIKE '%$sSrcVal%' OR UPPER(d.oxselvariant) LIKE '%$sSrcVal%' OR a.oxean LIKE '%$sSrcVal%') "
-                    . "AND d.oxorderid = o.oxid "
-                    . "AND d.oxartid = a.oxid "
-                    . "AND o.oxuserid = u.oxid "
+        $sSql = "SELECT "
+                    . "o.oxid AS oxorderid, o.oxstorno AS oxstorno, o.oxordernr AS oxordernr, u.oxid AS userid, "
+                . "DATE(o.oxorderdate) as oxorderdate, o.oxtotalordersum AS oxtotalordersum, o.oxcurrency AS oxcurrency, "
+                    . "u.oxusername, u.oxcustnr, o.oxbillsal, REPLACE(REPLACE(o.oxbillsal,'MRS','{$replaceMRS}'),'MR','{$replaceMR}') AS personalsal, o.oxbillfname, o.oxbilllname, "
+                    . "o.oxbillstreet, o.oxbillstreetnr, o.oxbillzip, o.oxbillcity, c.oxtitle AS oxcountry, o.oxpaid AS oxpaid, p.oxdesc AS oxpayment "
+                . "FROM $sOxvOrder o, $sOxvUser u, $sOxvCountry c, $sOxvPayments p "
+                . "WHERE "
+                    . "o.oxuserid = u.oxid "
                     . "AND u.oxcountryid = c.oxid "
-                    . "AND o.oxstorno = 0 "
-                    . "AND a.oxshopid = $sShopId "
-                . "ORDER BY d.oxtitle ASC, o.oxorderdate DESC "
-                . "LIMIT 0,100";
-
+                    . "AND o.oxpaymenttype = p.oxid "
+                    . "AND o.oxshopid = '" . $this->_aViewData["oViewConf"]->getActiveShopId() . "' "
+                . "ORDER BY o.oxordernr DESC "
+                . "LIMIT 0,50 ";
+                    
+        $sSql2 = "SELECT "
+                    . "oa.oxartid AS oxartid, oa.oxartnum AS oxartnum, oa.oxtitle AS oxtitle, oa.oxselvariant AS oxselvariant, "
+                    . "oa.oxamount AS oxamount, oa.oxbprice AS oxbprice, oa.oxbrutprice AS oxbrutprice, "
+                    . "f.oxfilename AS oxfilename, f.oxlastdownload AS oxlastdownload, f.oxdownloadcount AS oxdownloadcount, "
+                    . "a.oxactive AS oxactive, a.oxean AS oxean "
+                . "FROM $sOxvOrderArticles oa "
+                . "LEFT JOIN $sOxvOrderFiles f "
+                    . "ON (oa.oxid = f.oxorderarticleid) "
+                . "LEFT JOIN $sOxvArticles a "
+                    . "ON (oa.oxartid = a.oxid) "
+                . "WHERE "
+                    . "oa.oxorderid = ";
+                    
         $aOrders = array();
 
-        if ($sSrcVal != "") {
-            $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
-            $rs = $oDb->Execute($sSql);
-            while (!$rs->EOF) {
-                array_push($aOrders, $rs->fields);
-                $rs->MoveNext();
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $rso = $oDb->Execute($sSql);
+        $i = 0;
+        $aOrder = array();
+        while (!$rso->EOF) {
+            $aOrder = $rso->fields;
+            $sSql = $sSql2 . "'" . $aOrder['oxorderid'] . "'";
+
+            $aDetails = array();
+            $rsoa = $oDb->Execute($sSql);
+            while (!$rsoa->EOF) {
+                array_push($aDetails, $rsoa->fields);
+                $rsoa->MoveNext();
             }
+
+            $aOrders[$i] = $aOrder;
+            $aOrders[$i]['details'] = $aDetails;
+            $rso->MoveNext();
+            $i++;
         }
         
         return $aOrders;

@@ -2,8 +2,8 @@
 <OX>
     <OXMENU id="NAVIGATION_ESHOPADMIN">
         <MAINMENU id="mxorders">
-		<SUBMENU id="jxsales_menu" cl="jxsales">
-		</SUBMENU>
+		<SUBMENU id="jxsales_menu" cl="jxsales" />
+                <SUBMENU id="jxsales_menu_latest" cl="jxsales_latest" />
 	</MAINMENU>
     </OXMENU>
 </OX>
