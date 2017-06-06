@@ -1,5 +1,6 @@
-[{*debug*}]
 [{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign box=" "}]
+
+<link href="[{$oViewConf->getModuleUrl('jxsales','out/admin/src/jxsales.css')}]" type="text/css" rel="stylesheet">
 
 <script type="text/javascript">
   if(top)
@@ -50,24 +51,14 @@ function editThis( sID, sClass )
     oTransfer.submit();
 }
 
-function change_all( name, elem )
-{
-    if(!elem || !elem.form) 
-        return alert("Check Parameters");
-
-    var chkbox = elem.form.elements[name];
-    if (!chkbox) 
-        return alert(name + " doesn't exist!");
-
-    if (!chkbox.length) 
-        chkbox.checked = elem.checked; 
-    else 
-        for(var i = 0; i < chkbox.length; i++)
-            chkbox[i].checked = elem.checked;
-}
-
 </script>
 
+    <div style="float: right;">
+        <br />
+        <input class="edittext" type="submit" 
+            onClick="Javascript:window.print();return true;" 
+            value=" [{ oxmultilang ident="JXSALES_PRINT" }] " [{ $readonly }]>
+    </div>
     <h1>[{ oxmultilang ident="JXSALES_LATEST_TITLE" }]</h1>
     <form name="transfer" id="transfer" action="[{ $shop->selflink }]" method="post">
         [{ $shop->hiddensid }]
@@ -100,7 +91,6 @@ function change_all( name, elem )
             <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="ORDER_LIST_PAID" }]</div></div></td>
             <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="ORDER_MAIN_PAIDWITH" }]</div></div></td>
             <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="JXSALES_TOTALSUM" }]</div></div></td>
-        <td class="listfilter" style="[{$headStyle}]" align="center"><div class="r1"><div class="b1"><input type="checkbox" onclick="change_all('jxsales_oxid[]', this)"></div></div></td>
         </tr>
 
         [{assign var="actArtTitle" value="..." }]
@@ -122,7 +112,6 @@ function change_all( name, elem )
                 <td class="[{$listclass}]" style="background-color:#dcdcdc;"><a href="Javascript:editThis('[{$aOrder.userid}]','admin_user');" title="[{ oxmultilang ident="JXSALES_GOTOUSER" }]">[{$aOrder.oxpaid}]</a></td>
                 <td class="[{$listclass}]" style="background-color:#dcdcdc;"><a href="Javascript:editThis('[{$aOrder.userid}]','admin_user');" title="[{ oxmultilang ident="JXSALES_GOTOUSER" }]">[{$aOrder.oxpayment}]</a></td>
                 <td class="[{$listclass}]" style="background-color:#dcdcdc;" align="right"><a href="Javascript:editThis('[{$aOrder.userid}]','admin_user');" title="[{ oxmultilang ident="JXSALES_GOTOUSER" }]">[{$aOrder.oxtotalordersum|string_format:"%.2f"}] [{$aOrder.oxcurrency}]</a></td>
-                <td class="[{$listclass}]" style="background-color:#dcdcdc;" align="center"><input type="checkbox" name="jxsales_oxid[]" value="[{$aOrder.orderartid}]"></td>
             </tr>
             <tr>
                 <td class="listitem" style="background-color:white;" colspan="2"></td>

@@ -11,6 +11,7 @@ $aLang = array(
     'JXSALES_CUSTNO'          => 'Cust-No.',
     'JXSALES_VARIANT'         => 'Variant',
     'JXSALES_DOWNLOAD'        => 'Download',
+    'JXSALES_PRINT'           => 'Print',
     'JXSALES_GOTOPRODUCT'     => 'Goto product',
     'JXSALES_GOTOORDER'       => 'Goto order',
     'JXSALES_GOTOUSER'        => 'Goto user',

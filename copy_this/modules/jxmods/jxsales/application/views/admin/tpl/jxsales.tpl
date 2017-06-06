@@ -1,5 +1,6 @@
-[{*debug*}]
 [{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign box=" "}]
+
+<link href="[{$oViewConf->getModuleUrl('jxsales','out/admin/src/jxsales.css')}]" type="text/css" rel="stylesheet">
 
 <script type="text/javascript">
   if(top)
@@ -68,14 +69,13 @@ function change_all( name, elem )
 
 </script>
 
-[{*<div class="center">*}]
-    <h1>[{ oxmultilang ident="JXSALES_TITLE" }]</h1>
-    <form name="transfer" id="transfer" action="[{ $shop->selflink }]" method="post">
-        [{ $shop->hiddensid }]
-        <input type="hidden" name="oxid" value="[{ $oxid }]">
-        <input type="hidden" name="cl" value="article" size="40">
-        <input type="hidden" name="updatelist" value="1">
-    </form>
+<h1>[{ oxmultilang ident="JXSALES_TITLE" }]</h1>
+<form name="transfer" id="transfer" action="[{ $shop->selflink }]" method="post">
+    [{ $shop->hiddensid }]
+    <input type="hidden" name="oxid" value="[{ $oxid }]">
+    <input type="hidden" name="cl" value="article" size="40">
+    <input type="hidden" name="updatelist" value="1">
+</form>
         
 <form name="jxsales" id="jxsales" action="[{ $oViewConf->selflink }]" method="post">
     <p>
@@ -97,6 +97,11 @@ function change_all( name, elem )
             <input class="edittext" type="submit" 
                 onClick="document.forms['jxsales'].elements['fnc'].value = 'downloadResult';" 
                 value=" [{ oxmultilang ident="JXSALES_DOWNLOAD" }] " [{ $readonly }]>
+        </td>
+        <td>
+            <input class="edittext" type="submit" 
+                onClick="Javascript:window.print();return true;" 
+            value=" [{ oxmultilang ident="JXSALES_PRINT" }] " [{ $readonly }]>
         </td>
         </tr></table>
         [{*</form>*}]
@@ -126,16 +131,15 @@ function change_all( name, elem )
             [{if $oConfig->getConfigParam("bJxSalesDisplayCountry") }]
                 <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="GENERAL_COUNTRY" }]</div></div></td>
             [{/if}]
-        <td class="listfilter" style="[{$headStyle}]" align="center"><div class="r1"><div class="b1"><input type="checkbox" onclick="change_all('jxsales_oxid[]', this)"></div></div></td>
+            <td class="listfilter" style="[{$headStyle}]" align="center"><div class="r1"><div class="b1"><input type="checkbox" onclick="change_all('jxsales_oxid[]', this)"></div></div></td>
         </tr>
 
-        [{*<tbody>*}]
-        [{ assign var="actArtTitle" value="..." }]
-        [{ assign var="actArtVar" value="..." }]
+        [{assign var="actArtTitle" value="..." }]
+        [{assign var="actArtVar" value="..." }]
         [{foreach name=outer item=Order from=$aOrders}]
             <tr>
-                [{ cycle values="listitem,listitem2" assign="listclass" }]
-                [{ if $actArtTitle != $Order.oxtitle }]
+                [{cycle values="listitem,listitem2" assign="listclass" }]
+                [{if $actArtTitle != $Order.oxtitle }]
                     <td valign="top" class="[{$listclass}][{ if $Order.oxactive == 1}] active[{/if}]" height="15">
                         <div class="listitemfloating">&nbsp</a></div>
                     </td>
@@ -147,7 +151,7 @@ function change_all( name, elem )
                     [{/if}]
                     [{ assign var="actArtTitle" value=$Order.oxtitle }]
                     [{ assign var="actArtVar" value=$Order.oxselvariant }]
-                [{ elseif $actArtVar != $Order.oxselvariant }]
+                [{elseif $actArtVar != $Order.oxselvariant }]
                     <td class="[{$listclass}]"> </td>
                     <td class="[{$listclass}]"> </td>
                     <td class="[{$listclass}]"> </td>
@@ -156,7 +160,7 @@ function change_all( name, elem )
                         <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.artid}]','article');" title="[{ oxmultilang ident="JXSALES_GOTOPRODUCT" }]">[{$Order.oxean}]</a></td>
                     [{/if}]
                     [{ assign var="actArtVar" value=$Order.oxselvariant }]
-                [{ else }]
+                [{else }]
                     <td class="[{$listclass}]"> </td>
                     <td class="[{$listclass}]"> </td>
                     <td class="[{$listclass}]"> </td>
@@ -177,9 +181,7 @@ function change_all( name, elem )
                 <td class="[{$listclass}]" align="center"><input type="checkbox" name="jxsales_oxid[]" value="[{$Order.orderartid}]"></td>
             </tr>
         [{/foreach}]
-        [{*</tbody>*}]
 
         </table>
     </div>
 </form>
-[{*</div>*}]
