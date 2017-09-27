@@ -6,7 +6,9 @@ $aLang = array(
     
     'jxsales_menu'            => 'Artikel-Kunden Analyse',
     'jxsales_menu_latest'     => 'Neueste Bestellungen',
+    'tbcluser_jxsales'        => 'Bestellungen',
     'JXSALES_TITLE'           => 'Artikel-Kunden Analyse',
+    'JXSALES_SEARCHTERM'      => 'Suchbegriff',
     'JXSALES_LATEST_TITLE'    => 'Neueste Bestellungen',
     'JXSALES_CUSTNO'          => 'Kd-Nr.',
     'JXSALES_VARIANT'         => 'Variante',
@@ -17,6 +19,9 @@ $aLang = array(
     'JXSALES_GOTOUSER'        => 'Benutzer anzeigen',
     'JXSALES_ARTSUM'          => 'Summe',
     'JXSALES_TOTALSUM'        => 'Gesamtsumme',
+    'JXSALES_ORDERNO'         => 'Best-Nr.',
+    'JXSALES_INVNO'           => 'Re-Nr.',
+    'JXSALES_INVTOTAL'        => 'Re-Betrag',
 
     'SHOP_MODULE_GROUP_JXSALES_DISPLAY'        => 'Anzeige',
     'SHOP_MODULE_bJxSalesDisplayEAN'           => 'EAN anzeigen',
@@ -34,5 +39,7 @@ $aLang = array(
     'SHOP_MODULE_sJxSalesSeparator_pipe'       => '|&nbsp;&nbsp; (Senkrechter Strich)',
     'SHOP_MODULE_sJxSalesSeparator_tilde'      => '&sim;&nbsp; (Tilde)',
     'SHOP_MODULE_bJxSalesQuote'                => 'Spalten mit Anführungszeichen begrenzen',
+    'SHOP_MODULE_GROUP_JXSALES_INCLUDESETTINGS'=> 'Benutzerdefinierte Erweiterungen',
+    'SHOP_MODULE_aJxSalesIncludeFiles'         => 'Benutzerdefinierte Analyen<br>(je eine Datei pro Zeile) ',
 );
 ?>

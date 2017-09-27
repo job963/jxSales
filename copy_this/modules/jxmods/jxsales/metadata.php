@@ -11,7 +11,7 @@ $sMetadataVersion = '1.0';
  * @link       https://github.com/job963/jxSales
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
  * @copyright  (C) Joachim Barthel 2012-2017
- * @version    0.4.0 
+ * @version    0.5.0 
  * 
 */
 $aModule = array(
@@ -22,19 +22,23 @@ $aModule = array(
                         'en' => 'Analysis module for finding customers by sold products.'
                         ),
     'thumbnail'    => 'jxsales.png',
-    'version'      => '0.4.0',
+    'version'      => '0.5.0',
     'author'       => 'Joachim Barthel',
     'url'          => 'https://github.com/job963/jxSales',
     'email'        => 'jobarthel@gmail.com',
     'extend'       => array(
+                            //'oxorder'   => 'jxmods/jxbuyergroups/models/jxbuyergroups_oxorder',
+                            'oxorderarticle'   => 'jxmods/jxsales/models/orderarticle_jxsales'
                         ),
     'files'        => array(
                             'jxsales'        => 'jxmods/jxsales/application/controllers/admin/jxsales.php',
-                            'jxsales_latest' => 'jxmods/jxsales/application/controllers/admin/jxsales_latest.php'
+                            'jxsales_latest' => 'jxmods/jxsales/application/controllers/admin/jxsales_latest.php',
+                            'user_jxsales'   => 'jxmods/jxsales/application/controllers/admin/user_jxsales.php'
                         ),
     'templates'    => array(
                             'jxsales.tpl'        => 'jxmods/jxsales/application/views/admin/tpl/jxsales.tpl',
-                            'jxsales_latest.tpl' => 'jxmods/jxsales/application/views/admin/tpl/jxsales_latest.tpl'
+                            'jxsales_latest.tpl' => 'jxmods/jxsales/application/views/admin/tpl/jxsales_latest.tpl',
+                            'user_jxsales.tpl'   => 'jxmods/jxsales/application/views/admin/tpl/user_jxsales.tpl'
                         ),
     'settings'     => array(
                             array(
@@ -86,6 +90,13 @@ $aModule = array(
                                     'name'  => 'bJxSalesQuote', 
                                     'type'  => 'bool', 
                                     'value' => 'true'
+                                    ),
+                            array(
+                                    'group' => 'JXSALES_INCLUDESETTINGS', 
+                                    'name'  => 'aJxSalesIncludeFiles', 
+                                    'type'  => 'arr', 
+                                    'value' => array(), 
+                                    'position' => 1
                                     ),
                         )
     );

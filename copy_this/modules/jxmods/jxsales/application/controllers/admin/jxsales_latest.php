@@ -19,6 +19,7 @@
  * @link      https://github.com/job963/jxSales
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
  * @copyright (C) Joachim Barthel 2012-2017
+ * @author    Joachim Barthel <jobarthel@gmail.com>
  *
  */
  
@@ -134,6 +135,8 @@ class jxsales_latest extends oxAdminView
         $sOxvOrderFiles = getViewName( 'oxorderfiles', $this->_iEditLang, $sShopID );
 
         $sWhere = "";
+        //$sPaidOnly = $this->getConfig()->getRequestParameter( 'jxsales_paidonly' );
+        
         if ( is_string($this->_aViewData["oViewConf"]->getActiveShopId()) ) { 
             // This is a CE or PE Shop
             $sShopId = "'" . $this->_aViewData["oViewConf"]->getActiveShopId() . "'";
@@ -153,6 +156,7 @@ class jxsales_latest extends oxAdminView
                     . "o.oxuserid = u.oxid "
                     . "AND u.oxcountryid = c.oxid "
                     . "AND o.oxpaymenttype = p.oxid "
+                    . "AND o.oxtotalbrutsum != 0.0 "
                     . "AND o.oxshopid = '" . $this->_aViewData["oViewConf"]->getActiveShopId() . "' "
                 . "ORDER BY o.oxordernr DESC "
                 . "LIMIT 0,50 ";

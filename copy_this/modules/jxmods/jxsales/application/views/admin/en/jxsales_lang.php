@@ -6,6 +6,7 @@ $aLang = array(
     
     'jxsales_menu'            => 'Article-Customer Analysis',
     'jxsales_menu_latest'     => 'Latest Orders',
+    'tbcluser_jxsales'        => 'Orders',
     'JXSALES_TITLE'           => 'Article-Customer Analysis',
     'JXSALES_LATEST_TITLE'    => 'Latest Orders',
     'JXSALES_CUSTNO'          => 'Cust-No.',
@@ -17,6 +18,9 @@ $aLang = array(
     'JXSALES_GOTOUSER'        => 'Goto user',
     'JXSALES_ARTSUM'          => 'Sum',
     'JXSALES_TOTALSUM'        => 'Total Sum',
+    'JXSALES_ORDERNO'         => 'Order No.',
+    'JXSALES_INVNO'           => 'Inv.No.',
+    'JXSALES_INVTOTAL'        => 'Inv.Total',
 
     'SHOP_MODULE_GROUP_JXSALES_DISPLAY'        => 'Display',
     'SHOP_MODULE_bJxSalesDisplayEAN'           => 'Show EAN',

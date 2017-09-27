@@ -85,7 +85,9 @@ function change_all( name, elem )
         <input type="hidden" name="oxid" value="[{ $oxid }]">
         <table width="80%"><tr>
         <td align="left">
-            <label>Suchbegriff:</label> <input type="text" name="jxsales_srcval" value="[{ $jxsales_srcval }]">
+            <label>[{ oxmultilang ident="JXSALES_SEARCHTERM" }]:</label> <input type="text" name="jxsales_srcval" value="[{ $jxsales_srcval }]">&nbsp;&nbsp;
+            <label>[{ oxmultilang ident="ARTICLE_MAIN_ACTIVEFROM" }]:</label> <input type="text" name="jxsales_srcbegin" value="[{ $jxsales_srcbegin }]" size="10">&nbsp;
+            <label>[{ oxmultilang ident="ARTICLE_MAIN_ACTIVETO" }]:</label> <input type="text" name="jxsales_srcend" value="[{ $jxsales_srcend }]" size="10">&nbsp;&nbsp;
             <input type="submit" 
                 onClick="document.forms['jxsales'].elements['fnc'].value = '';" 
                 value=" [{ oxmultilang ident="ORDER_MAIN_UPDATE_DELPAY" }] " />
