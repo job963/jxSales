@@ -26,9 +26,14 @@ class User_jxSales extends oxAdminView
 {
     /**
      * 
+     * @var string
      */
     protected $_sThisTemplate = "user_jxsales.tpl";
     
+    /**
+     *
+     * @var array 
+     */
     protected $_aIncFields = array();
 
     /**

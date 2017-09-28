@@ -6,14 +6,17 @@
  * and open the template in the editor.
  */
 
-$this->aJxArticleHead['hello'] = 'Welcome';
+switch ($this->_sJxSection) {
+    case 'head':
+        $this->_aJxArticleHead['persparam'] = 'Parameter';
+        break;
+    
+    case 'body':
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
 
-//$this->oxorderarticles__oxartid->value
-//$this->oxorderarticles__smx_aboid->value
-$oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $sSelect = "SELECT oa.oxpersparam FROM oxorderarticles oa "
+                 . "WHERE oa.oxid = " . $oDb->quote($this->oxorderarticles__oxid->value);
+        $this->_aJxArticleData['persparam'] = $oDb->getOne($sSelect);
+        break;
+}
 
-$sSelect = "SELECT oa.oxpersparam FROM oxorderarticles oa "
-         . "WHERE oa.oxid = " . $oDb->quote($this->oxorderarticles__oxid->value);
-$this->aJxArticleData['persparam'] = $oDb->getOne($sSelect);
-
-//$this->aJxArticleData['hello'] = 'Hello World!';

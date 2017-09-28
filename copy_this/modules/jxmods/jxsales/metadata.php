@@ -18,7 +18,7 @@ $aModule = array(
     'id'           => 'jxsales',
     'title'        => 'jxSales - Sales Search and Analysis',
     'description'  => array(
-                        'de' => 'Analyse-Modul für die Ermittlung von Produkten und Käufern.',
+                        'de' => 'Analyse-Modul für die Ermittlung von Käufern und Produkten.',
                         'en' => 'Analysis module for finding customers by sold products.'
                         ),
     'thumbnail'    => 'jxsales.png',
@@ -27,8 +27,8 @@ $aModule = array(
     'url'          => 'https://github.com/job963/jxSales',
     'email'        => 'jobarthel@gmail.com',
     'extend'       => array(
-                            //'oxorder'   => 'jxmods/jxbuyergroups/models/jxbuyergroups_oxorder',
-                            'oxorderarticle'   => 'jxmods/jxsales/models/orderarticle_jxsales'
+                            'oxlist'           => 'jxmods/jxsales/models/oxlist_jxsales',
+                            'oxorderarticle'   => 'jxmods/jxsales/models/oxorderarticle_jxsales'
                         ),
     'files'        => array(
                             'jxsales'        => 'jxmods/jxsales/application/controllers/admin/jxsales.php',

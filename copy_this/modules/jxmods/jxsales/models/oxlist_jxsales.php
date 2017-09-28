@@ -22,34 +22,31 @@
  * 
  */
 
-class orderarticle_jxsales extends orderarticle_jxsales_parent
+class oxlist_jxsales extends oxlist_jxsales_parent
 {
 
-    protected $ajxArticleHead = array();
-    protected $aJxArticleData = array();
+    /**
+     *
+     * @var string 
+     */
+    protected $_sJxSection = 'head';
+    
+    /**
+     *
+     * @var string 
+     */
+    protected $_aJxArticleHead = array();
         
+    
+    /**
+     * 
+     * @param type $sKey
+     * @return type
+     */
     public function jxGetAdditionalArticleHeader($sKey = '')
     {
-        
-        //$oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
-        
-        include $this->_jxIncPath('models') . 'orderarticle_subscription.inc.php';
-        
-        if ($sKey != '') {
-            return $this->aJxArticleHead[$sKey];
-        }
-        else {
-            return $this->aJxArticleHead;
-        }
-    }    
-
-    
-    public function jxGetAdditionalArticleData($sKey = '')
-    {
-        // aJxSalesIncludeFiles
-        // $this->_jxIncPath('models') . 'orderarticle_subscription.inc.php';
-
         $oConfig = oxRegistry::get("oxConfig");
+        
         if (count($oConfig->getConfigParam("aJxSalesIncludeFiles")) != 0) {
             $aIncFiles = $oConfig->getConfigParam("aJxSalesIncludeFiles");
             $sIncPath = $this->_jxIncPath('models');
@@ -66,10 +63,10 @@ class orderarticle_jxsales extends orderarticle_jxsales_parent
         }
         
         if ($sKey != '') {
-            return $this->aJxArticleData[$sKey];
+            return $this->_aJxArticleHead[$sKey];
         }
         else {
-            return $this->aJxArticleData;
+            return $this->_aJxArticleHead;
         }
     }    
 
@@ -80,14 +77,6 @@ class orderarticle_jxsales extends orderarticle_jxsales_parent
      */
     protected function _jxIncPath($sSubPath)
     {
-        //$sModuleId = $this->getEditObjectId();
-
-        /*$this->_aViewData['oxid'] = $sModuleId;*/
-
-        //$oModule = oxNew('oxModule');
-        //$oModule->load($sModuleId);
-        /*$sModuleId = $oModule->getId();*/
-        
         $oConfig = oxRegistry::get("oxConfig");
         $sIncPath = $oConfig->getConfigParam("sShopDir") . 'modules/jxmods/jxsales';
         

@@ -66,6 +66,16 @@ function editThis( sID, sClass )
 
 <div id="liste">
     <table cellspacing="0" cellpadding="0" border="0" style="width:100%;">
+        <colgroup>
+            <col width="2%">
+            <col width="6%">
+            <col width="6%">
+            <col width="8%">
+            <col width="14%">
+            <col width="7%">
+            <col width="7%">
+            <col width="60%">
+        </colgroup>
         <tr>
             <td class="listheader">[{oxmultilang ident="GENERAL_ACTIVTITLE" }]</td>
             <td class="listheader">[{oxmultilang ident="JXSALES_ORDERNO" }]</td>
@@ -79,20 +89,22 @@ function editThis( sID, sClass )
                 <colgroup>
                     <col width="10%">
                     <col width="30%">
-                    <col width="10%">
-                    <col width="10%">
-                    <col width="10%">
+                    <col width="7%">
+                    <col width="7%">
+                    [{foreach name=AddHeader item=sArticleHead from=$oOrdersList->jxGetAdditionalArticleHeader() }]
+                        <col width="7%">
+                    [{/foreach}]
                 </colgroup>
                 [{assign var=headStyle value="font-weight:bold;color:gray;" }]
                 <tr>
                     <td style="[{$headStyle}]">[{oxmultilang ident="ORDER_OVERVIEW_PDF_ARTID" }]</td>
                     <td style="[{$headStyle}]">[{oxmultilang ident="ARTICLE_MAIN_TITLE" }]</td>
                     <td style="[{$headStyle}]">[{oxmultilang ident="ORDER_OVERVIEW_PDF_AMOUNT" }]</td>
-                    <td style="[{$headStyle}]">[{oxmultilang ident="ORDER_OVERVIEW_PDF_VAT" }]</td>
                     <td style="[{$headStyle}]">[{oxmultilang ident="JXSALES_ARTSUM" }]</td>
-                    [{*foreach name=AddHeader item=sHeader from=$oOrderArticle->jxGetAdditionalArticleHeader() }]
-                        <td style="[{$headStyle}]">[{$sHeader }]</td>
-                    [{/foreach*}]
+                    [{*assign var=iArticleHeaderCount value=$oOrdersList->jxGetAdditionalArticleHeader()|@count*}]
+                    [{foreach name=AddHeader item=sArticleHead from=$oOrdersList->jxGetAdditionalArticleHeader() }]
+                        <td style="[{$headStyle}]">[{$sArticleHead }]</td>
+                    [{/foreach}]
                 </tr>
                 </table>
             </td>
@@ -117,9 +129,14 @@ function editThis( sID, sClass )
                     <colgroup>
                         <col width="10%">
                         <col width="30%">
-                        <col width="10%">
-                        <col width="10%">
-                        <col width="10%">
+                        <col width="7%">
+                        <col width="7%">
+                        [{*for $i=0 to $iArticleHeaderCount }]
+                            <col width="10%">
+                        [{/for*}]
+                        [{foreach name=AddHeader item=sArticleHead from=$oOrdersList->jxGetAdditionalArticleHeader() }]
+                            <col width="7%">
+                        [{/foreach}]
                     </colgroup>
                     [{assign var=artStyle value="color:gray;" }]
                     [{foreach item=oOrderArticle from=$oOrderArticles }]
@@ -130,7 +147,6 @@ function editThis( sID, sClass )
                                 [{$oOrderArticle->oxorderarticles__oxtitle->value}][{if $oOrderArticle->oxorderarticles__oxselvariant->value}], [{$oOrderArticle->oxorderarticles__oxselvariant->value}][{/if}]
                             </td>
                             <td style="[{$artStyle}]">[{$oOrderArticle->oxorderarticles__oxamount->value}]</td>
-                            <td style="[{$artStyle}]">[{$oOrderArticle->oxorderarticles__oxvat->value}]</td>
                             <td style="[{$artStyle}]">[{$oOrderArticle->oxorderarticles__oxbrutprice->value}]</td>
                             [{foreach name=AddHeader item=sArticleData from=$oOrderArticle->jxGetAdditionalArticleData() }]
                                 <td style="[{$artStyle}]">[{$sArticleData }]</td>
