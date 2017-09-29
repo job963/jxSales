@@ -55,6 +55,7 @@ class User_jxSales extends oxAdminView
             
         }
         
+        $this->_aViewData["sIsoLang"] = oxRegistry::getLang()->getLanguageAbbr($iLang);
         $this->_aViewData["oOrdersList"] = $oOrdersList;
         
         return $this->_sThisTemplate;

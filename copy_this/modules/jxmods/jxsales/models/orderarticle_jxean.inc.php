@@ -8,7 +8,8 @@
 
 switch ($this->_sJxSection) {
     case 'head':
-        $this->_aJxArticleHead['jxean'] = 'EAN';
+        $this->_aJxArticleHead['jxean'] = array('de' => 'EAN',
+                                                'en' => 'EAN');
         break;
     
     case 'body':

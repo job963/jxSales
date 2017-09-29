@@ -8,7 +8,8 @@
 
 switch ($this->_sJxSection) {
     case 'head':
-        $this->_aJxArticleHead['persparam'] = 'Parameter';
+        $this->_aJxArticleHead['persparam'] = array('de' => 'Parameter',
+                                                    'en' => 'Parameters');
         break;
     
     case 'body':

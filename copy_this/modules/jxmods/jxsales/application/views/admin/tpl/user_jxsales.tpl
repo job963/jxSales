@@ -101,14 +101,15 @@ function editThis( sID, sClass )
                     <td style="[{$headStyle}]">[{oxmultilang ident="ARTICLE_MAIN_TITLE" }]</td>
                     <td style="[{$headStyle}]">[{oxmultilang ident="ORDER_OVERVIEW_PDF_AMOUNT" }]</td>
                     <td style="[{$headStyle}]">[{oxmultilang ident="JXSALES_ARTSUM" }]</td>
-                    [{*assign var=iArticleHeaderCount value=$oOrdersList->jxGetAdditionalArticleHeader()|@count*}]
                     [{foreach name=AddHeader item=sArticleHead from=$oOrdersList->jxGetAdditionalArticleHeader() }]
-                        <td style="[{$headStyle}]">[{$sArticleHead }]</td>
+                        <td style="[{$headStyle}]">[{$sArticleHead[$sIsoLang] }]</td>
                     [{/foreach}]
                 </tr>
                 </table>
             </td>
         </tr>
+        
+        [{assign var=oUserPayments value=$edit->getUserPayments()}]
         
         [{foreach name=orders item=oOrder from=$oOrdersList}]
             [{ cycle values="listitem,listitem2" assign="listclass" }]
@@ -119,10 +120,15 @@ function editThis( sID, sClass )
                 <td class="[{ $listclass}]"><a href="Javascript:editThis('[{$oOrder->oxorder__oxid->value}]','admin_order');">[{$oOrder->oxorder__oxordernr->value}]</a></td>
                 <td class="[{ $listclass}]">[{$oOrder->oxorder__oxinvoicenr->value}]</td>
                 <td class="[{ $listclass}]">[{$oOrder->oxorder__oxorderdate->value|substr:0:10}]</td>
-                <td class="[{ $listclass}]">[{$oOrder->oxorder__oxpaymenttype->value}]</td>
+                <td class="[{ $listclass}]">
+                    [{foreach item=oPayment from=$oUserPayments}]
+                        [{if $oPayment->oxuserpayments__oxid->value == $oOrder->oxorder__oxpaymentid}]
+                            [{$oPayment->oxpayments__oxdesc->value }]
+                        [{/if}]
+                    [{/foreach}]
+                </td>
                 <td class="[{ $listclass}]">[{$oOrder->oxorder__oxvoucherdiscount->value}]</td>
                 <td class="[{ $listclass}]">[{$oOrder->oxorder__oxtotalordersum->value}]</td>
-                [{*<td>[{$oOrder->getPaymentType()|@print_r}]*}]
                 <td class="[{ $listclass}]">
                     [{assign var=oOrderArticles value=$oOrder->getOrderArticles()}]
                     <table width="100%">
