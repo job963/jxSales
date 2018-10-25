@@ -1,0 +1,36 @@
+{
+    "name": "jxmods/jxsales",
+    "description": "jxSales - Sales Search and Analysis",
+    "type": "oxideshop-module",
+    "keywords": ["oxid", "modules", "eShop"],
+    "homepage": "https://github.com/job963/jxSales",
+    "authors": [
+        {
+            "name": "Joachim Barthel",
+            "email": "jobarthel@gmail.com",
+            "homepage": "https://github.com/job963"
+        }
+    ],
+    "support": {
+        "email": "jobarthel@gmail.com",
+        "issues": "https://github.com/job963/jxSales/issues",
+        "docs": "https://github.com/job963/jxSales/blob/master/README.md"
+    },
+    "license": [
+        "GPL-3.0-only"
+    ],
+    "minimum-stability": "stable",
+    "extra": {
+        "oxideshop": {
+            "target-directory": "jxmods/jxsales"
+        }
+    },
+    "require": {
+        "php": ">=7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "JxMods\\JxSales\\": "../../../source/modules/jxmods/jxsales"
+        }
+    }
+}

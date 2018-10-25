@@ -3,15 +3,15 @@
 /**
  * Metadata version
  */
-$sMetadataVersion = '1.1';
+$sMetadataVersion = '2.0';
  
 /**
  * Module information
-  * 
+ * 
  * @link       https://github.com/job963/jxSales
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
  * @copyright  (C) Joachim Barthel 2012-2017
- * @version    0.5.1
+ * @version    0.6.0
  * 
 */
 $aModule = array(
@@ -22,7 +22,7 @@ $aModule = array(
                         'en' => 'Analysis module for finding customers by sold products.'
                         ),
     'thumbnail'    => 'jxsales.png',
-    'version'      => '0.5.1',
+    'version'      => '0.6.0',
     'author'       => 'Joachim Barthel',
     'url'          => 'https://github.com/job963/jxSales',
     'email'        => 'jobarthel@gmail.com',
