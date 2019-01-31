@@ -125,6 +125,7 @@ function change_all( name, elem )
                 <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="ARTICLE_MAIN_EAN" }]</div></div></td>
             [{/if}]
             <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="GENERAL_DATE" }]</div></div></td>
+            <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="ARTICLE_EXTEND_UNITQUANTITY" }]</div></div></td>
             <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="USER_MAIN_NAME" }] ([{ oxmultilang ident="JXSALES_CUSTNO" }])</div></div></td>
             [{if $oConfig->getConfigParam("bJxSalesDisplayAddress") }]
                 <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="USER_MAIN_STRNR" }]</div></div></td>
@@ -138,7 +139,7 @@ function change_all( name, elem )
 
         [{assign var="actArtTitle" value="..." }]
         [{assign var="actArtVar" value="..." }]
-        [{foreach name=outer item=Order from=$aOrders}]
+        [{foreach name=outer item=Order from=$aOrders }]
             <tr>
                 [{cycle values="listitem,listitem2" assign="listclass" }]
                 [{if $actArtTitle != $Order.oxtitle }]
@@ -172,6 +173,7 @@ function change_all( name, elem )
                     <td class="[{$listclass}]"> </td>
                 [{/if}]
                 <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.orderid}]','admin_order');" title="[{ oxmultilang ident="JXSALES_GOTOORDER" }]">[{$Order.oxorderdate}]</a></td>
+                <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.orderid}]','admin_order');" title="[{ oxmultilang ident="JXSALES_GOTOORDER" }]">[{$Order.oxamount}]</a></td>
                 <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.userid}]','admin_user');" title="[{ oxmultilang ident="JXSALES_GOTOUSER" }]">[{$Order.oxbillfname}] [{$Order.oxbilllname}] ([{$Order.oxcustnr}])</a></td>
                 [{if $oConfig->getConfigParam("bJxSalesDisplayAddress") }]
                     <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.userid}]','admin_user');" title="[{ oxmultilang ident="JXSALES_GOTOUSER" }]">[{$Order.oxbillstreet}] [{$Order.oxbillstreetnr}]</a></td>

@@ -18,7 +18,7 @@
  *
  * @link      https://github.com/job963/jxSales
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
- * @copyright (C) Joachim Barthel 2012-2017
+ * @copyright (C) Joachim Barthel 2012-2019
  * @author    Joachim Barthel <jobarthel@gmail.com>
  *
  */
@@ -62,7 +62,7 @@ class jxsales extends oxAdminView
             $this->_aViewData["jxsales_srcend"] = $sSrcEnd;
         }
 
-        $this->_aViewData["aOrders"] = $this->_retrieveData($sSrcVal, $sSrcBegin, $sSrcEnd);
+        $this->_aViewData["aOrders"] = $this->_retrieveData( $sSrcVal, $sSrcBegin, $sSrcEnd );
 
         $oModule = oxNew('oxModule');
         $oModule->load('jxsales');
@@ -111,9 +111,19 @@ class jxsales extends oxAdminView
             $sSrcVal = "";
         else
             $sSrcVal = strtoupper($sSrcVal);
+
+        $sSrcBegin = $this->getConfig()->getRequestParameter( 'jxsales_srcbegin' );
+        if (empty($sSrcBegin)) {
+            $sSrcBegin = '0000-00-00';
+        }
+        
+        $sSrcEnd = $this->getConfig()->getRequestParameter( 'jxsales_srcend' );
+        if (empty($sSrcEnd)) {
+            $sSrcEnd = '2999-12-31';
+        }
         
         $aOrders = array();
-        $aOrders = $this->_retrieveData($sSrcVal);
+        $aOrders = $this->_retrieveData( $sSrcVal, $sSrcBegin, $sSrcEnd );
 
         $aOxid = $this->getConfig()->getRequestParameter( 'jxsales_oxid' );
         
@@ -170,7 +180,7 @@ class jxsales extends oxAdminView
         }
         
         $sSql = "SELECT d.oxid AS orderartid, a.oxid AS artid, o.oxid AS orderid, u.oxid AS userid, a.oxactive AS oxactive, d.oxartnum, d.oxtitle, d.oxselvariant, a.oxean, "
-                    . "DATE(o.oxorderdate) as oxorderdate, u.oxusername, u.oxcustnr, o.oxbillsal, REPLACE(REPLACE(o.oxbillsal,'MRS','{$replaceMRS}'),'MR','{$replaceMR}') AS personalsal, o.oxbillfname, o.oxbilllname, "
+                    . "DATE(o.oxorderdate) as oxorderdate, d.oxamount, u.oxusername, u.oxcustnr, o.oxbillsal, REPLACE(REPLACE(o.oxbillsal,'MRS','{$replaceMRS}'),'MR','{$replaceMR}') AS personalsal, o.oxbillfname, o.oxbilllname, "
                     . "o.oxbillstreet, o.oxbillstreetnr, o.oxbillzip, o.oxbillcity, c.oxtitle AS oxcountry "
                 . "FROM $sOxvOrderArticles d, $sOxvOrder o, $sOxvArticles a, $sOxvUser u, $sOxvCountry c "
                 . "WHERE (UPPER(d.oxartnum) LIKE '%$sSrcVal%' OR UPPER(d.oxtitle) LIKE '%$sSrcVal%' OR UPPER(d.oxselvariant) LIKE '%$sSrcVal%' OR a.oxean LIKE '%$sSrcVal%') "
@@ -182,7 +192,7 @@ class jxsales extends oxAdminView
                     . "AND o.oxstorno = 0 "
                     . "AND a.oxshopid = $sShopId "
                 . "ORDER BY d.oxtitle ASC, o.oxorderdate DESC "
-                . "LIMIT 0,100";
+                . "LIMIT 0,250";
 
         $aOrders = array();
 
