@@ -10,7 +10,7 @@ $sMetadataVersion = '2.0';
  * 
  * @link       https://github.com/job963/jxSales
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
- * @copyright  (C) Joachim Barthel 2012-2017
+ * @copyright  (C) Joachim Barthel 2012-2018
  * @version    0.6.0
  * 
 */
@@ -36,9 +36,9 @@ $aModule = array(
                             'user_jxsales'   => 'jxmods/jxsales/application/controllers/admin/user_jxsales.php'
                         ),
     'templates'    => array(
-                            'jxsales.tpl'        => 'jxmods/jxsales/application/views/admin/tpl/jxsales.tpl',
-                            'jxsales_latest.tpl' => 'jxmods/jxsales/application/views/admin/tpl/jxsales_latest.tpl',
-                            'user_jxsales.tpl'   => 'jxmods/jxsales/application/views/admin/tpl/user_jxsales.tpl'
+                            'jxsales.tpl'        => 'jxmods/jxsales/Application/views/admin/tpl/jxsales.tpl',
+                            'jxsales_latest.tpl' => 'jxmods/jxsales/Application/views/admin/tpl/jxsales_latest.tpl',
+                            'user_jxsales.tpl'   => 'jxmods/jxsales/Application/views/admin/tpl/user_jxsales.tpl'
                         ),
     'settings'     => array(
                             array(

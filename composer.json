@@ -2,7 +2,11 @@
     "name": "jxmods/jxsales",
     "description": "jxSales - Sales Search and Analysis",
     "type": "oxideshop-module",
-    "keywords": ["oxid", "modules", "eShop"],
+    "keywords": [
+        "oxid", 
+        "modules", 
+        "admin"
+    ],
     "homepage": "https://github.com/job963/jxSales",
     "authors": [
         {
