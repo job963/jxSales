@@ -26,6 +26,7 @@ $aLang = array(
     'SHOP_MODULE_bJxSalesDisplayEAN'           => 'Show EAN',
     'SHOP_MODULE_bJxSalesDisplayAddress'       => 'Show address',
     'SHOP_MODULE_bJxSalesDisplayCountry'       => 'Show country',
+    'SHOP_MODULE_sJxSalesSelectLimit'          => 'Max. Records',
     'SHOP_MODULE_GROUP_JXSALES_REPLACE'        => 'Replacements',
     'SHOP_MODULE_sJxSalesReplaceMRS'           => 'Salutation for female customers (eg. "Dear Mrs.")',
     'SHOP_MODULE_sJxSalesReplaceMR'            => 'Salutation for male customers (eg. "Dear Mr.")',

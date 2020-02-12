@@ -122,7 +122,7 @@ function editThis( sID, sClass )
                 <td class="[{ $listclass}]">[{$oOrder->oxorder__oxtotalordersum->value}]</td>
                 
                 [{assign var=oOrderArticles value=$oOrder->getOrderArticles()}]
-                [{assign var=artStyle value="color:gray;" }]
+                [{assign var=artStyle value="color:gray;white-space:nowrap;" }]
                     
                 <td class="[{ $listclass}]">
                     [{foreach item=oOrderArticle from=$oOrderArticles }]

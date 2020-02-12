@@ -62,7 +62,9 @@ class jxsales extends oxAdminView
             $this->_aViewData["jxsales_srcend"] = $sSrcEnd;
         }
 
-        $this->_aViewData["aOrders"] = $this->_retrieveData( $sSrcVal, $sSrcBegin, $sSrcEnd );
+        $this->_aViewData["aOrders"] = $this->_retrieveData($sSrcVal, $sSrcBegin, $sSrcEnd);
+        $this->_aViewData["iTotalOrders"] = $this->_countData($sSrcVal, $sSrcBegin, $sSrcEnd);
+        $this->_aViewData["iDisplayedOrders"] = count( $this->_aViewData["aOrders"] );
 
         $oModule = oxNew('oxModule');
         $oModule->load('jxsales');
@@ -116,14 +118,13 @@ class jxsales extends oxAdminView
         if (empty($sSrcBegin)) {
             $sSrcBegin = '0000-00-00';
         }
-        
         $sSrcEnd = $this->getConfig()->getRequestParameter( 'jxsales_srcend' );
         if (empty($sSrcEnd)) {
             $sSrcEnd = '2999-12-31';
         }
         
         $aOrders = array();
-        $aOrders = $this->_retrieveData( $sSrcVal, $sSrcBegin, $sSrcEnd );
+        $aOrders = $this->_retrieveData($sSrcVal,$sSrcBegin,$sSrcEnd);
 
         $aOxid = $this->getConfig()->getRequestParameter( 'jxsales_oxid' );
         
@@ -162,6 +163,10 @@ class jxsales extends oxAdminView
         $myConfig = oxRegistry::get("oxConfig");
         $replaceMRS = $myConfig->getConfigParam("bJxSalesReplaceMRS");
         $replaceMR = $myConfig->getConfigParam("bJxSalesReplaceMR");
+        $iLimit = (int) $myConfig->getConfigParam("sJxSalesSelectLimit");
+        if ($iLimit == 0) {
+            $iLimit = 500;
+        }
 
         $sOxvOrderArticles = getViewName( 'oxorderarticles', $this->_iEditLang, $sShopID );
         $sOxvOrder = getViewName( 'oxorder', $this->_iEditLang, $sShopID );
@@ -192,7 +197,7 @@ class jxsales extends oxAdminView
                     . "AND o.oxstorno = 0 "
                     . "AND a.oxshopid = $sShopId "
                 . "ORDER BY d.oxtitle ASC, o.oxorderdate DESC "
-                . "LIMIT 0,250";
+                . "LIMIT 0,$iLimit";
 
         $aOrders = array();
 
@@ -207,5 +212,59 @@ class jxsales extends oxAdminView
         
         return $aOrders;
     }
- }
-?>
+
+    
+    /**
+     * 
+     * @param type $sSrcVal
+     * @param type $sSrcBegin
+     * @param type $sSrcEnd
+     * 
+     * @return array
+     */
+    private function _countData($sSrcVal, $sSrcBegin, $sSrcEnd)
+    {
+        $myConfig = oxRegistry::get("oxConfig");
+        $replaceMRS = $myConfig->getConfigParam("bJxSalesReplaceMRS");
+        $replaceMR = $myConfig->getConfigParam("bJxSalesReplaceMR");
+
+        $sOxvOrderArticles = getViewName( 'oxorderarticles', $this->_iEditLang, $sShopID );
+        $sOxvOrder = getViewName( 'oxorder', $this->_iEditLang, $sShopID );
+        $sOxvArticles = getViewName( 'oxarticles', $this->_iEditLang, $sShopID );
+        $sOxvUser = getViewName( 'oxuser', $this->_iEditLang, $sShopID );
+        $sOxvCountry = getViewName( 'oxcountry', $this->_iEditLang, $sShopID );
+
+        $sWhere = "";
+        if ( is_string($this->_aViewData["oViewConf"]->getActiveShopId()) ) { 
+            // This is a CE or PE Shop
+            $sShopId = "'" . $this->_aViewData["oViewConf"]->getActiveShopId() . "'";
+        }
+        else {
+            // This is a EE Shop
+            $sShopId = $this->_aViewData["oViewConf"]->getActiveShopId();
+        }
+        
+        $sSql = "SELECT COUNT(*) AS orderQuantity "
+                . "FROM $sOxvOrderArticles d, $sOxvOrder o, $sOxvArticles a, $sOxvUser u, $sOxvCountry c "
+                . "WHERE (UPPER(d.oxartnum) LIKE '%$sSrcVal%' OR UPPER(d.oxtitle) LIKE '%$sSrcVal%' OR UPPER(d.oxselvariant) LIKE '%$sSrcVal%' OR a.oxean LIKE '%$sSrcVal%') "
+                    . "AND d.oxorderid = o.oxid "
+                    . "AND d.oxartid = a.oxid "
+                    . "AND o.oxuserid = u.oxid "
+                    . "AND u.oxcountryid = c.oxid "
+                    . "AND DATE(o.oxorderdate) >= '$sSrcBegin' AND DATE(o.oxorderdate) <= '$sSrcEnd' "
+                    . "AND o.oxstorno = 0 "
+                    . "AND a.oxshopid = $sShopId "
+                . "ORDER BY d.oxtitle ASC, o.oxorderdate DESC ";
+
+        $aOrders = array();
+
+        if ($sSrcVal != "") {
+            $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+            $rs = $oDb->Execute($sSql);
+            return $rs->fields['orderQuantity'];
+        }
+        
+        return 0;
+    }
+
+}

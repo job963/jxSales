@@ -96,6 +96,9 @@ function change_all( name, elem )
             [{*<input type="submit" value=" [{ oxmultilang ident="ORDER_MAIN_UPDATE_DELPAY" }] " />*}]
         </td>
         <td>
+            [{ $iDisplayedOrders }] / [{ $iTotalOrders }]
+        </td>
+        <td>
             <input class="edittext" type="submit" 
                 onClick="document.forms['jxsales'].elements['fnc'].value = 'downloadResult';" 
                 value=" [{ oxmultilang ident="JXSALES_DOWNLOAD" }] " [{ $readonly }]>
@@ -106,7 +109,6 @@ function change_all( name, elem )
             value=" [{ oxmultilang ident="JXSALES_PRINT" }] " [{ $readonly }]>
         </td>
         </tr></table>
-        [{*</form>*}]
     </p>
 
     [{assign var="oConfig" value=$oViewConf->getConfig()}]
@@ -139,10 +141,10 @@ function change_all( name, elem )
 
         [{assign var="actArtTitle" value="..." }]
         [{assign var="actArtVar" value="..." }]
-        [{foreach name=outer item=Order from=$aOrders }]
+        [{foreach name=outer item=Order from=$aOrders}]
             <tr>
                 [{cycle values="listitem,listitem2" assign="listclass" }]
-                [{if $actArtTitle != $Order.oxtitle }]
+                [{if $actArtTitle != $Order.oxtitle}]
                     <td valign="top" class="[{$listclass}][{ if $Order.oxactive == 1}] active[{/if}]" height="15">
                         <div class="listitemfloating">&nbsp</a></div>
                     </td>
@@ -154,7 +156,7 @@ function change_all( name, elem )
                     [{/if}]
                     [{ assign var="actArtTitle" value=$Order.oxtitle }]
                     [{ assign var="actArtVar" value=$Order.oxselvariant }]
-                [{elseif $actArtVar != $Order.oxselvariant }]
+                [{elseif $actArtVar != $Order.oxselvariant}]
                     <td class="[{$listclass}]"> </td>
                     <td class="[{$listclass}]"> </td>
                     <td class="[{$listclass}]"> </td>
@@ -163,7 +165,7 @@ function change_all( name, elem )
                         <td class="[{$listclass}]"><a href="Javascript:editThis('[{$Order.artid}]','article');" title="[{ oxmultilang ident="JXSALES_GOTOPRODUCT" }]">[{$Order.oxean}]</a></td>
                     [{/if}]
                     [{ assign var="actArtVar" value=$Order.oxselvariant }]
-                [{else }]
+                [{else}]
                     <td class="[{$listclass}]"> </td>
                     <td class="[{$listclass}]"> </td>
                     <td class="[{$listclass}]"> </td>

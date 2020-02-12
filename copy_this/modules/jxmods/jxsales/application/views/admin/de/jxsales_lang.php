@@ -27,6 +27,7 @@ $aLang = array(
     'SHOP_MODULE_bJxSalesDisplayEAN'           => 'EAN anzeigen',
     'SHOP_MODULE_bJxSalesDisplayAddress'       => 'Adresse anzeigen',
     'SHOP_MODULE_bJxSalesDisplayCountry'       => 'Land anzeigen',
+    'SHOP_MODULE_sJxSalesSelectLimit'          => 'Max. Anzahl',
     'SHOP_MODULE_GROUP_JXSALES_REPLACE'        => 'Ersetzungen',
     'SHOP_MODULE_sJxSalesReplaceMRS'           => 'Anrede für weibliche Kunden (z.B. "Liebe Frau")',
     'SHOP_MODULE_sJxSalesReplaceMR'            => 'Anrede für männliche Kunden (z.B. "Lieber Herr")',

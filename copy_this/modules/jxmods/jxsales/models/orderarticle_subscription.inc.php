@@ -18,6 +18,7 @@ switch ($this->_sJxSection) {
     
     case 'body':
         $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $oDb->execute('SET SESSION group_concat_max_len = 100000;');
 
         // get SMX_SERVICETYPEID and SMX_SERVICETYPEDATA
         $sSelect = "SELECT CONCAT('<a href=\"#\" title=\"', REPLACE(REPLACE(REPLACE(REPLACE(s.smx_servicetypedata,'\"',''),'{','{\n'),',',',\n'),'}','\n}') ,'\">',s.smx_servicetypeid, '</a>') AS smx_servicetypeid "

@@ -22,7 +22,7 @@ $aModule = array(
                         'en' => 'Analysis module for finding customers by sold products.'
                         ),
     'thumbnail'    => 'jxsales.png',
-    'version'      => '0.5.2',
+    'version'      => '0.5.3',
     'author'       => 'Joachim Barthel',
     'url'          => 'https://github.com/job963/jxSales',
     'email'        => 'jobarthel@gmail.com',
@@ -58,6 +58,12 @@ $aModule = array(
                                     'name'  => 'bJxSalesDisplayCountry', 
                                     'type'  => 'bool', 
                                     'value' => 'true'
+                                    ),
+                            array(
+                                    'group' => 'JXSALES_DISPLAY', 
+                                    'name'  => 'sJxSalesSelectLimit', 
+                                    'type'  => 'str', 
+                                    'value' => '1000'
                                     ),
                             array(
                                     'group' => 'JXSALES_REPLACE', 
