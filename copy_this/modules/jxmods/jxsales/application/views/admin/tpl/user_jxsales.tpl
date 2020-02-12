@@ -1,13 +1,13 @@
 [{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign}]
 
 <script type="text/javascript">
-  if(top)
-  {
+    
+if(top) {
     top.sMenuItem    = "[{ oxmultilang ident="mxuadmin" }]";
     top.sMenuSubItem = "[{ oxmultilang ident="mxusers" }]";
     top.sWorkArea    = "[{$_act}]";
     top.setTitle();
-  }
+}
 
 function editThis( sID, sClass )
 {

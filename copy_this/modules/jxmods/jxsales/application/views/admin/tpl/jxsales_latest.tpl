@@ -3,13 +3,13 @@
 <link href="[{$oViewConf->getModuleUrl('jxsales','out/admin/src/jxsales.css')}]" type="text/css" rel="stylesheet">
 
 <script type="text/javascript">
-  if(top)
-  {
+
+if(top) {
     top.sMenuItem    = "[{ oxmultilang ident="mxorders" }]";
     top.sMenuSubItem = "[{ oxmultilang ident="jxsales_menu" }]";
     top.sWorkArea    = "[{$_act}]";
     top.setTitle();
-  }
+}
 
 function editThis( sID, sClass )
 {
@@ -53,6 +53,20 @@ function editThis( sID, sClass )
 
 </script>
 
+<style>
+    .pdf {
+        color: firebrick;
+        font-weight: bold;
+        font-size: 0.7em;
+        border: 1px solid firebrick;
+        border-radius: 4px;
+        background-color: #ffdddd;
+        padding: 0px 1px 0px 1px;
+        position: relative;
+        top: -2px;
+    }
+</style>
+
     <div style="float: right;">
         <br />
         <input class="edittext" type="submit" 
@@ -67,7 +81,11 @@ function editThis( sID, sClass )
         <input type="hidden" name="updatelist" value="1">
     </form>
         
-    <form name="jxsales" id="jxsales" action="[{ $oViewConf->selflink }]" method="post">
+    <form name="jxsales_latest" id="jxsales_latest" action="[{ $oViewConf->selflink }]" method="post">
+        [{ $oViewConf->hiddensid }]
+        <input type="hidden" name="cl" value="jxsales_latest">
+        <input type="hidden" name="fnc" value="downloadPDF">
+        <input type="hidden" name="jxsales_pdf" value="">
 
     [{assign var="oConfig" value=$oViewConf->getConfig()}]
     
@@ -88,6 +106,7 @@ function editThis( sID, sClass )
             [{if $oConfig->getConfigParam("bJxSalesDisplayCountry") }]
                 <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="GENERAL_COUNTRY" }]</div></div></td>
             [{/if}]
+            <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="JXSALES_INVNO" }]</div></div></td>
             <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="ORDER_LIST_PAID" }]</div></div></td>
             <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="ORDER_MAIN_PAIDWITH" }]</div></div></td>
             <td class="listfilter" style="[{$headStyle}]"><div class="r1"><div class="b1">[{ oxmultilang ident="JXSALES_TOTALSUM" }]</div></div></td>
@@ -109,8 +128,9 @@ function editThis( sID, sClass )
                 [{if $oConfig->getConfigParam("bJxSalesDisplayCountry") }]
                     <td class="[{$listclass}]" style="background-color:#dcdcdc;"><a href="Javascript:editThis('[{$aOrder.userid}]','admin_user');" title="[{ oxmultilang ident="JXSALES_GOTOUSER" }]">[{$aOrder.oxcountry}]</a></td>
                 [{/if}]
-                <td class="[{$listclass}]" style="background-color:#dcdcdc;"><a href="Javascript:editThis('[{$aOrder.userid}]','admin_user');" title="[{ oxmultilang ident="JXSALES_GOTOUSER" }]">[{$aOrder.oxpaid}]</a></td>
-                <td class="[{$listclass}]" style="background-color:#dcdcdc;"><a href="Javascript:editThis('[{$aOrder.userid}]','admin_user');" title="[{ oxmultilang ident="JXSALES_GOTOUSER" }]">[{$aOrder.oxpayment}]</a></td>
+                <td class="[{$listclass}]" style="background-color:#dcdcdc;"><a href="#" onClick="document.forms['jxsales_latest'].elements['jxsales_pdf'].value = '[{$aOrder.invpdf}]';document.getElementById('jxsales_latest').submit();" title="[{ oxmultilang ident="VOUCHERSERIE_EXPORTDOWNLOAD" }]">&nbsp;<span class="pdf">PDF</span>&nbsp;[{$aOrder.oxinvoicenr}]</a></td>
+                <td class="[{$listclass}]" style="background-color:#dcdcdc;"><a href="Javascript:editThis('[{$aOrder.orderid}]','admin_user');" title="[{ oxmultilang ident="JXSALES_GOTOORDER" }]">[{$aOrder.oxpaid}]</a></td>
+                <td class="[{$listclass}]" style="background-color:#dcdcdc;"><a href="Javascript:editThis('[{$aOrder.orderid}]','admin_user');" title="[{ oxmultilang ident="JXSALES_GOTOORDER" }]">[{$aOrder.oxpayment}]</a></td>
                 <td class="[{$listclass}]" style="background-color:#dcdcdc;" align="right"><a href="Javascript:editThis('[{$aOrder.userid}]','admin_user');" title="[{ oxmultilang ident="JXSALES_GOTOUSER" }]">[{$aOrder.oxtotalordersum|string_format:"%.2f"}] [{$aOrder.oxcurrency}]</a></td>
             </tr>
             <tr>
@@ -123,6 +143,7 @@ function editThis( sID, sClass )
                                 <col style="width:20%;">
                                 <col style="width:13%;">
                                 <col style="width:15%;">
+                                <col style="width:5%;">
                                 <col style="width:7%;">
                                 <col style="width:7%;">
                             </colgroup>
@@ -134,6 +155,7 @@ function editThis( sID, sClass )
                                     <th style="[{$thDetailStyle}]">[{ oxmultilang ident="ARTICLE_MAIN_TITLE" }], [{ oxmultilang ident="JXSALES_VARIANT" }]</th>
                                     <th style="[{$thDetailStyle}]">[{ oxmultilang ident="ARTICLE_FILES_TABLE_FILENAME" }]</th>
                                     <th style="[{$thDetailStyle}]">[{ oxmultilang ident="ORDER_DOWNLOADS_LASTDOWNLOAD" }]</th>
+                                    <th style="[{$thDetailStyle}]">[{ oxmultilang ident="GENERAL_IVAT" }]</th>
                                     <th style="[{$thDetailStyle}]">[{ oxmultilang ident="ORDER_OVERVIEW_PDF_UNITPRICE" }]</th>
                                     <th style="[{$thDetailStyle}]">[{ oxmultilang ident="JXSALES_ARTSUM" }]</th>
                             </tr>
@@ -147,6 +169,7 @@ function editThis( sID, sClass )
                                         <td class="[{$innerlistclass}]" style="[{$tdDetailStyle}]">[{if $oldartnum != $aArticle.oxartnum}][{$aArticle.oxtitle}][{if $aArticle.oxselvariant!=""}][{$aArticle.oxselvariant}][{/if}][{/if}]</td>
                                         <td class="[{$innerlistclass}]" style="[{$tdDetailStyle}]">[{$aArticle.oxfilename}]</td>
                                         <td class="[{$innerlistclass}]" style="[{$tdDetailStyle}]">[{if $aArticle.oxfilename != ""}][{$aArticle.oxdownloadcount}] x, [{$aArticle.oxlastdownload}][{/if}]</td>
+                                        <td class="[{$innerlistclass}]" style="[{$tdDetailStyle}]" >[{if $oldartnum != $aArticle.oxartnum}][{$aArticle.oxvat|string_format:"%.2f"}]&nbsp;%[{/if}]</td>
                                         <td class="[{$innerlistclass}]" style="[{$tdDetailStyle}]" >[{if $oldartnum != $aArticle.oxartnum}][{$aArticle.oxamount}] x [{$aArticle.oxbprice|string_format:"%.2f"}][{/if}]</td>
                                         <td class="[{$innerlistclass}]" style="[{$tdDetailStyle}]" >[{if $oldartnum != $aArticle.oxartnum}][{$aArticle.oxbrutprice|string_format:"%.2f"}][{/if}]</td>
                                 </tr>

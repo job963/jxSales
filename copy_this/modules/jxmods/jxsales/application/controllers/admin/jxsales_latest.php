@@ -18,7 +18,7 @@
  *
  * @link      https://github.com/job963/jxSales
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
- * @copyright (C) Joachim Barthel 2012-2017
+ * @copyright (C) Joachim Barthel 2012-2020
  * @author    Joachim Barthel <jobarthel@gmail.com>
  *
  */
@@ -48,6 +48,37 @@ class jxsales_latest extends oxAdminView
 
         return $this->_sThisTemplate;
     }
+    
+    
+    /**
+     * 
+     * @return type
+     */
+    public function downloadPDF()
+    {
+        $myConfig = oxRegistry::get("oxConfig");
+        $sPdfFilename = $this->getConfig()->getRequestParameter( 'jxsales_pdf' );
+        
+        if( file_exists($sPdfFilename) ) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="'.basename($sPdfFilename).'"');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: no-cache');
+            header('Expires: 0');
+            header('Content-Length: ' . filesize($sPdfFilename));
+            
+            readfile( $sPdfFilename );
+            
+            exit();
+        }
+        else {
+            $this->_logAction( 'jxsales_latest: ' .$sPdfFilename . ' does not exist.' );
+        }
+        
+
+        return;
+}
     
     
     /**
@@ -151,6 +182,8 @@ class jxsales_latest extends oxAdminView
                 . "DATE(o.oxorderdate) as oxorderdate, o.oxtotalordersum AS oxtotalordersum, o.oxcurrency AS oxcurrency, "
                     . "u.oxusername, u.oxcustnr, o.oxbillsal, REPLACE(REPLACE(o.oxbillsal,'MRS','{$replaceMRS}'),'MR','{$replaceMR}') AS personalsal, o.oxbillfname, o.oxbilllname, "
                     . "o.oxbillstreet, o.oxbillstreetnr, o.oxbillzip, o.oxbillcity, c.oxtitle AS oxcountry, o.oxpaid AS oxpaid, p.oxdesc AS oxpayment "
+                    . ", (SELECT ai.smx_invoiceid FROM allplan_invoice ai WHERE ai.oxorderid = o.oxid) AS oxinvoicenr "
+                    . ", (SELECT ai.smx_invoicepath FROM allplan_invoice ai WHERE ai.oxorderid = o.oxid) AS invpdf "
                 . "FROM $sOxvOrder o, $sOxvUser u, $sOxvCountry c, $sOxvPayments p "
                 . "WHERE "
                     . "o.oxuserid = u.oxid "
@@ -163,7 +196,7 @@ class jxsales_latest extends oxAdminView
                     
         $sSql2 = "SELECT "
                     . "oa.oxartid AS oxartid, oa.oxartnum AS oxartnum, oa.oxtitle AS oxtitle, oa.oxselvariant AS oxselvariant, "
-                    . "oa.oxamount AS oxamount, oa.oxbprice AS oxbprice, oa.oxbrutprice AS oxbrutprice, "
+                    . "oa.oxamount AS oxamount, oa.oxbprice AS oxbprice, oa.oxbrutprice AS oxbrutprice, oa.oxvat AS oxvat, "
                     . "f.oxfilename AS oxfilename, f.oxlastdownload AS oxlastdownload, f.oxdownloadcount AS oxdownloadcount, "
                     . "a.oxactive AS oxactive, a.oxean AS oxean "
                 . "FROM $sOxvOrderArticles oa "
@@ -199,5 +232,22 @@ class jxsales_latest extends oxAdminView
         
         return $aOrders;
     }
- }
-?>
+
+
+
+    /**
+     * 
+     * @param type $sText
+     */
+    private function _logAction($sText)
+    {
+        $myConfig = oxRegistry::get("oxConfig");
+        $sShopPath = $myConfig->getConfigParam("sShopDir");
+        $sLogPath = $sShopPath.'/log/';
+        
+        $fh = fopen($sLogPath.'jxmods.log',"a+");
+        fputs($fh,$sText."\n");
+        fclose($fh);
+    }
+    
+}
