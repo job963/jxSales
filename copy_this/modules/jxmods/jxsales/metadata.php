@@ -11,7 +11,7 @@ $sMetadataVersion = '1.1';
  * @link       https://github.com/job963/jxSales
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
  * @copyright  (C) Joachim Barthel 2012-2020
- * @version    0.5.4
+ * @version    0.5.5
  * 
 */
 $aModule = array(
@@ -22,7 +22,7 @@ $aModule = array(
                         'en' => 'Analysis module for finding customers by sold products.'
                         ),
     'thumbnail'    => 'jxsales.png',
-    'version'      => '0.5.4',
+    'version'      => '0.5.5',
     'author'       => 'Joachim Barthel',
     'url'          => 'https://github.com/job963/jxSales',
     'email'        => 'jobarthel@gmail.com',
